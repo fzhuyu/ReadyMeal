@@ -5,7 +5,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-//Added new stuff below
 @Entity
 public class User {
     @PrimaryKey(autoGenerate  = true)
