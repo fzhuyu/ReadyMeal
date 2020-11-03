@@ -30,7 +30,6 @@ public class UserInputData extends AppCompatActivity {
         });
     }
 
-
     // this is how you get an instance of the Room database
     /*AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(),
             AppDatabase.class, "User_db").build();

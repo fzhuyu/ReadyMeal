@@ -35,8 +35,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     def room_version = "2.2.5"
 
-    // stuff about Room implemented
-
+    // Room dependencies below
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     // optional - RxJava support for Room
@@ -45,5 +44,9 @@ dependencies {
     implementation "androidx.room:room-guava:$room_version"
     // optional - Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
+
+    // dependencies for using a REST API below
+    implementation 'com.android.volley:volley:1.1.0'
+    implementation 'com.google.code.gson:gson:2.4'
 
 }

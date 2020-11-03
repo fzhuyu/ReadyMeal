@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class User {
-    @PrimaryKey(autoGenerate  = true)
+    @PrimaryKey(autoGenerate = true)
     public int UserID;
 
     @ColumnInfo(name = "First_Name")
