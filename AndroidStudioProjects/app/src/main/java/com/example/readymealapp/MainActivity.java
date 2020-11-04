@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         /////// code for using a get request for JSON object from API ///////
         ////////////////////        11/3             //////////////////////////////
 
+
         AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
         //Local_db.userDao().LoadFoodPref()
 
@@ -52,26 +53,33 @@ public class MainActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<String, String>();
         params.put("Chicken", "Calories");
 
-        // gets JSON request
-        RequestQueue ReqQ = Volley.newRequestQueue(this);
-        JsonObjectRequest ObjReq = new JsonObjectRequest(
-                Request.Method.GET,
-                "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX",
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+        try {
+            // gets JSON request
+            RequestQueue ReqQ = Volley.newRequestQueue(this);
+            JsonObjectRequest ObjReq = new JsonObjectRequest(
+                    Request.Method.GET,
+                    "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX",
+                    null,
+                    new Response.Listener<JSONObject>() {
 
+                        @Override
+                        public void onResponse(JSONObject response) {
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
                     }
-                }
-        );
-        //uses a GET request for URL
-        // the jsonObjectRequest section takes in an input parameter to look for specific data (Not sure if it works rn)
+            );
+            //uses a GET request for URL
+            // the jsonObjectRequest section takes in an input parameter to look for specific data (Not sure if it works rn)
+        }
+        catch (NullPointerException e)
+        {
+            e.printStackTrace();
+        }
 
         /////// end of code I added for API ///////
 
