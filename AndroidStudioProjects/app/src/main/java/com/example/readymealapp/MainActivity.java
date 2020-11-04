@@ -42,15 +42,18 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
 
 
-        // code for using a get request for JSON object from API
+        /////// code for using a get request for JSON object from API ///////
+        ////////////////////        11/3             //////////////////////////////
 
         AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
         //Local_db.userDao().LoadFoodPref()
 
+        // parameters for JSON parsing "Chicken" will be replaced by LoadFoodPref()
         Map<String, String> params = new HashMap<String, String>();
         params.put("Chicken", "Calories");
 
-        RequestQueue ReqQ = Volley.newRequestQueue(this);   //prepares request object
+        // gets JSON request
+        RequestQueue ReqQ = Volley.newRequestQueue(this);
         JsonObjectRequest ObjReq = new JsonObjectRequest(
                 Request.Method.GET,
                 "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX",
@@ -66,9 +69,11 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 }
-        );  //uses a GET request for URL
-        // the jsonObjectRequest section takes in an input parameter to look for specific data (I'll add it soon)
-        // end of code I added for API
+        );
+        //uses a GET request for URL
+        // the jsonObjectRequest section takes in an input parameter to look for specific data (Not sure if it works rn)
+
+        /////// end of code I added for API ///////
 
 
         fab.setOnClickListener(new View.OnClickListener() {

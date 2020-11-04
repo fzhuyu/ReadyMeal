@@ -24,6 +24,9 @@ public interface UserDao {
     @Query("SELECT * FROM user WHERE Food_Preference IN (:FoodFav) AND First_Name IN (:FName) AND Last_Name IN (:LName)")
     User LoadFoodPref(String FName, String LName, String FoodFav);
 
+    @Query("SELECT * FROM user WHERE BMI IN (:FName) AND (:LName)")
+    User LoadBMI(String FName, String LName);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void insertUser(User... users);
 

@@ -19,11 +19,11 @@ public class User {
     @ColumnInfo(name = "Food_Preference")
     public String FoodFav;
 
-    @ColumnInfo(name = "Height")
-    public int UserHeight;
+    @ColumnInfo(name = "Sex")
+    public String UserSex;
 
-    @ColumnInfo(name = "Weight")
-    public int UserWeight;
+    @ColumnInfo(name = "Age")
+    public int UserAge;
 
     @ColumnInfo(name = "BMI")
     public int UserBMI;
