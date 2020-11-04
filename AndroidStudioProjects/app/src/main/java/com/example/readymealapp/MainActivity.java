@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         JsonObjectRequest ObjReq = new JsonObjectRequest(
                 Request.Method.GET,
                 "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX",
-                (JSONObject) params,
+                null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
