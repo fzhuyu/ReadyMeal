@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".UserInput">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -57,7 +57,8 @@
                 android:layout_marginTop="32dp"
                 android:ems="10"
                 android:hint="@string/HeightHint"
-                android:inputType="number" />
+                android:inputType="number"
+                android:importantForAutofill="no"/>
 
             <TextView
                 android:id="@+id/textView5"
@@ -74,7 +75,8 @@
                 android:layout_marginTop="24dp"
                 android:ems="10"
                 android:hint="@string/WeightHint"
-                android:inputType="number" />
+                android:inputType="number"
+                android:importantForAutofill="no"/>
 
             <TextView
                 android:id="@+id/textView6"
@@ -109,6 +111,7 @@
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="goToMainActivity"
                 android:text="@string/SubmitButton"
                 tools:text="Submit" />
         </LinearLayout>

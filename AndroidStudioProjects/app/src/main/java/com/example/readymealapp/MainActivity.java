@@ -1,6 +1,7 @@
 package com.example.readymealapp;
 
 import android.app.VoiceInteractor;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.android.volley.Request;
@@ -9,10 +10,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.readymealapp.ui.main.PlaceholderFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.constraintlayout.widget.Placeholder;
 import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.readymealapp.ui.main.SectionsPagerAdapter;
 
@@ -30,8 +34,12 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
@@ -40,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
+
 
 
         /////// code for using a get request for JSON object from API ///////
@@ -92,4 +101,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    //------------------------------------------Buttons------------------------------
+    //this comes from TheFileWhereTheButtonis.xml onClick="NameOfTheFunction";
+    //goes to the user input activity when user input button is pressed
+   /* public void goToUserInputData(View v){
+        Intent UserInputActivity = new Intent (this, UserInput.class);
+        startActivity(UserInputActivity);
+    }
+    //goes to Main Activity, will be changed to Home after home is implemented, this is the submit button function
+    //on the User Input page
+    public void goToMainActivity(View v){
+        Intent MainActivity = new Intent (this, MainActivity.class);
+        startActivity(MainActivity);
+    }*/
+    //------------------------------------------Buttons------------------------------
 }
