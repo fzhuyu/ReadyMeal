@@ -17,15 +17,20 @@ public interface UserDao {
     @Query("SELECT * FROM user WHERE UserID IN (:userIds)")
     List<User> loadAllByIds(int[] userIds);
 
-    @Query("SELECT * FROM user WHERE First_Name LIKE :FName AND " +
-            "Last_Name LIKE :LName LIMIT 1")
-    User findByName(String FName, String LName);
+    @Query("SELECT * FROM user WHERE First_Name LIKE (:FName)")
+    User findFirstName(String FName);
 
-    @Query("SELECT * FROM user WHERE Food_Preference IN (:FoodFav) AND First_Name IN (:FName) AND Last_Name IN (:LName)")
-    User LoadFoodPref(String FName, String LName, String FoodFav);
+    @Query("SELECT * FROM user WHERE Last_Name LIKE (:LName)")
+    User findLastName(String LName);
+
+    @Query("SELECT * FROM user WHERE Food_Preference IN (:FName) AND (:LName)")
+    String LoadFoodPref(User FName, User LName);
 
     @Query("SELECT * FROM user WHERE BMI IN (:FName) AND (:LName)")
-    User LoadBMI(String FName, String LName);
+    String LoadBMI(User FName, User LName);
+
+    @Query("SELECT * FROM user WHERE Desired_Calories_Under IN (:FName) AND (:LName)")
+    String LoadCalories(User FName, User LName);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void insertUser(User... users);

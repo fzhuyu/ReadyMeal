@@ -27,6 +27,8 @@ import android.widget.Button;
 
 import com.example.readymealapp.ui.main.SectionsPagerAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -39,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
 
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
@@ -50,20 +51,24 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
 
 
+        // name can be retreived from userinput page instead of room
+        String firstName = "";
+        String lastName = "";
 
-        /////// code for using a get request for JSON object from API ///////
-        ////////////////////        11/3             //////////////////////////////
-
-
+        // retreiving data from Room for food preferences and calories based on name of user
         AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
-        //Local_db.userDao().LoadFoodPref()
 
-        // parameters for JSON parsing "Chicken" will be replaced by LoadFoodPref()
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("Chicken", "Calories");
+        // this gets user's food preference
+        final String UserFood = Local_db.userDao().LoadFoodPref(
+                Local_db.userDao().findFirstName(firstName),
+                Local_db.userDao().findLastName(lastName)
+        );
 
-        try {
-            // gets JSON request
+        /////// code for using a GET request for JSON object from API ///////
+        ////////////////////////////////////////////////////////////////////
+        try
+        {
+            // Defnition for JSON request
             RequestQueue ReqQ = Volley.newRequestQueue(this);
             JsonObjectRequest ObjReq = new JsonObjectRequest(
                     Request.Method.GET,
@@ -73,6 +78,30 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onResponse(JSONObject response) {
+                            try {
+
+                                // get an array of JSON objects that are Branded Food Items
+                                JSONArray jsonArray = response.getJSONArray("BrandedFoodItem");
+
+                                // loop through this jsonArray to look for the user's food
+                                for (int i = 0; i < jsonArray.length(); i++)
+                                {
+                                    // set JSON object equal to foodfav
+                                    JSONObject foodfav = jsonArray.getJSONObject(i);
+
+                                    String foodName = foodfav.getString("description");
+
+                                    // if food name found in request equals the user's food preference, then store the calories to
+                                    if (foodName.compareTo(UserFood) == 0) {
+                                        int Calories = foodfav.getInt("calories");
+                                        break;
+                                    }
+                                    // else, don't set the calories
+                                }
+                            }
+                            catch(JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     },
                     new Response.ErrorListener() {
@@ -82,15 +111,19 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
             );
-            //uses a GET request for URL
-            // the jsonObjectRequest section takes in an input parameter to look for specific data (Not sure if it works rn)
+
+            /////////////////////// this actually does the GET Request /////////////////////////////
+            ReqQ.add(ObjReq);
+
+
         }
         catch (NullPointerException e)
         {
             e.printStackTrace();
         }
 
-        /////// end of code I added for API ///////
+        /////// end of code I added for GET Request ///////
+        //////////////////////////////////////////
 
 
         fab.setOnClickListener(new View.OnClickListener() {
