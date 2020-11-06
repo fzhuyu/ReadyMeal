@@ -16,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.constraintlayout.widget.Placeholder;
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,18 +52,15 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
 
 
-        // name can be retreived from userinput page instead of room
-        String firstName = "";
-        String lastName = "";
+        // name can be retreived from userinput page or something
+        String fname = "";
+        String lname = "";
 
         // retreiving data from Room for food preferences and calories based on name of user
         AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
 
-        // this gets user's food preference
-        final String UserFood = Local_db.userDao().LoadFoodPref(
-                Local_db.userDao().findFirstName(firstName),
-                Local_db.userDao().findLastName(lastName)
-        );
+        // this gets user's food preference by setting the value to an instance of a User class
+        final LiveData<User> userFood = Local_db.userDao().LoadFoodPref(fname, lname);
 
         /////// code for using a GET request for JSON object from API ///////
         ////////////////////////////////////////////////////////////////////
@@ -92,12 +90,13 @@ public class MainActivity extends AppCompatActivity {
                                     String foodName = foodfav.getString("description");
 
                                     // if food name found in request equals the user's food preference, then store the calories to
-                                    if (foodName.compareTo(UserFood) == 0) {
+                                    if (foodName.equals(userFood.toString())) {
                                         int Calories = foodfav.getInt("calories");
                                         break;
                                     }
                                     // else, don't set the calories
                                 }
+                                // will write store/show info to user
                             }
                             catch(JSONException e) {
                                 e.printStackTrace();
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             );
 
             /////////////////////// this actually does the GET Request /////////////////////////////
-            ReqQ.add(ObjReq);
+            //ReqQ.add(ObjReq);
 
 
         }
