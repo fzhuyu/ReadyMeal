@@ -7,4 +7,7 @@
     <color name="color1">#010203</color>
     <color name="color2">#3700B3</color>
     <color name="color3">#007070</color>
+
+    <color name="backgroundColor">#111543</color>
+    <color name="lighterBackground">#288bc4</color>
 </resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/446521447/ReadyMealApp.iml" filepath="$PROJECT_DIR$/.idea/modules/446521447/ReadyMealApp.iml" group="ReadyMealApp" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app.iml" group="ReadyMealApp/app" />
+    </modules>
+  </component>
+</project>
