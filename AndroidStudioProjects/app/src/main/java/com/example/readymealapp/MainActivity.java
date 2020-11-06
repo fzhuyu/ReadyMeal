@@ -1,8 +1,10 @@
 package com.example.readymealapp;
 
-import android.app.VoiceInteractor;
-import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.room.Room;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -10,30 +12,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.readymealapp.ui.main.PlaceholderFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
-
-import androidx.constraintlayout.widget.Placeholder;
-import androidx.lifecycle.LiveData;
-import androidx.room.Room;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-
 import com.example.readymealapp.ui.main.SectionsPagerAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,11 +28,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-        ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(sectionsPagerAdapter);
-        TabLayout tabs = findViewById(R.id.tabs);
-        tabs.setupWithViewPager(viewPager);
-        FloatingActionButton fab = findViewById(R.id.fab);
+        //ViewPager viewPager = findViewById(R.id.view_pager);              // Had to comment out these 4 lines in order to
+        //viewPager.setAdapter(sectionsPagerAdapter);                       // get the program running (ignoring the tabs)
+        //TabLayout tabs = findViewById(R.id.tabs);
+        //tabs.setupWithViewPager(viewPager);
+        //FloatingActionButton fab = findViewById(R.id.fab);
 
 
         // name can be retreived from userinput page or something
@@ -124,14 +107,14 @@ public class MainActivity extends AppCompatActivity {
         /////// end of code I added for GET Request ///////
         //////////////////////////////////////////
 
-
+        /*
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        })*/
     }
 
     //------------------------------------------Buttons------------------------------
