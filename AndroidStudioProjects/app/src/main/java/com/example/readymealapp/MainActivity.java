@@ -1,6 +1,9 @@
 package com.example.readymealapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -118,12 +121,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //------------------------------------------Buttons------------------------------
+
+
     //this comes from TheFileWhereTheButtonis.xml onClick="NameOfTheFunction";
     //goes to the user input activity when user input button is pressed
-   /* public void goToUserInputData(View v){
+      public void goToUserInputData(View v){
         Intent UserInputActivity = new Intent (this, UserInput.class);
         startActivity(UserInputActivity);
     }
+    /*
     //goes to Main Activity, will be changed to Home after home is implemented, this is the submit button function
     //on the User Input page
     public void goToMainActivity(View v){
