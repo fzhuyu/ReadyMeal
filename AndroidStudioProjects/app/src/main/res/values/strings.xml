@@ -130,6 +130,10 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="john">John</string>
+    <string name="doe">Doe</string>
     <!-- =========================================Values for UserInput===================================================== -->
 
 

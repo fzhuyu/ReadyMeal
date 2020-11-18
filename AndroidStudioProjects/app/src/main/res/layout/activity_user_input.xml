@@ -9,20 +9,31 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="16dp">
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView2"
+            <EditText
+                android:id="@+id/fName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                tools:text="User Input" />
+                android:ems="10"
+                android:hint="@string/first_name"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/lName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/last_name"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName" />
 
             <TextView
                 android:id="@+id/textView"
@@ -33,7 +44,7 @@
                 tools:text="Age" />
 
             <EditText
-                android:id="@+id/editTextNumber"
+                android:id="@+id/editTextAge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -57,8 +68,8 @@
                 android:layout_marginTop="32dp"
                 android:ems="10"
                 android:hint="@string/HeightHint"
-                android:inputType="number"
-                android:importantForAutofill="no"/>
+                android:importantForAutofill="no"
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -75,8 +86,8 @@
                 android:layout_marginTop="24dp"
                 android:ems="10"
                 android:hint="@string/WeightHint"
-                android:inputType="number"
-                android:importantForAutofill="no"/>
+                android:importantForAutofill="no"
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -111,9 +122,10 @@
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="goToMainActivity"
+                android:onClick="goToHomePage"
                 android:text="@string/SubmitButton"
                 tools:text="Submit" />
+
         </LinearLayout>
     </ScrollView>
 

@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class User {
-    @PrimaryKey(autoGenerate = true)
-    public int PriKey;
+    @PrimaryKey(autoGenerate = false)
+   // public int PriKey;
 
     @ColumnInfo(name = "ID")
     public int UserID;
@@ -33,4 +33,16 @@ public class User {
 
     @ColumnInfo(name = "Desired_Calories_Under")
     public int Calories;
+
+    /*public User(int UserID, String FName, String LName, String FoodFav, String UserSex, int UserAge, int UserBMI, int Calories)
+    {
+        this.UserID = UserID;
+        this.FName = FName;
+        this.LName = LName;
+        this.FoodFav = FoodFav;
+        this.UserSex = UserSex;
+        this.UserAge = UserAge;
+        this.UserBMI = UserBMI;
+        this.Calories = Calories;
+    }*/
 }

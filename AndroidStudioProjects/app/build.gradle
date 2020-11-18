@@ -20,6 +20,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    //This was added from https://developer.android.com/codelabs/android-room-with-a-view#3 to make Room database work
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    //-------------------------------------------------
 }
 
 dependencies {
@@ -51,3 +57,36 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.4'
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

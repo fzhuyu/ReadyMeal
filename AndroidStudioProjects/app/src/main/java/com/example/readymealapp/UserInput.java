@@ -1,6 +1,7 @@
 package com.example.readymealapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,12 +9,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.lang.Object;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class UserInput extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,19 +44,73 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
 
 
     }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        /*String text = parent.getItemAtPosition(position).toString();
-        Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT);*/
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
-    public void goToMainActivity(View v){
-        Intent MainActivity = new Intent (this, MainActivity.class);
-        startActivity(MainActivity);
+    public void goToHomePage(View v){
+        Intent HomePage = new Intent (this, HomePage.class);
+        int userAge = 0;
+
+        //Creating a variable for first name
+        EditText fNameEditText = findViewById(R.id.fName);
+        //save first name to a variable
+        String userfName = fNameEditText.getText().toString();
+
+        //Last Name
+        EditText lNameEditText = findViewById(R.id.lName);
+        String userlName = lNameEditText.getText().toString();
+
+        //Age
+        EditText TextAge = findViewById(R.id.editTextAge);
+        String StringAge = TextAge.getText().toString();
+
+        //if First Name is empty
+        if (userfName.matches("")) {
+            Toast.makeText(this, "First Name is Empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        else if (userlName.matches("")) {
+            Toast.makeText(this, "Last Name is Empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        else if (StringAge.isEmpty())
+        {
+            Toast.makeText(this, "Age is Invalid", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //else save the user name and go to home page
+        else
+            {
+            //instantiating the database
+            final AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
+            //creating the user
+            User me = new User();
+
+            //add the user first name into the database
+            me.FName = userfName;
+            me.LName = userlName;
+            //convert age to int
+            userAge = Integer.parseInt(StringAge);
+            me.UserAge = userAge;
+
+            //Save to database
+            Executor myExecutor = Executors.newSingleThreadExecutor();
+            myExecutor.execute(() -> {
+                Local_db.userDao().insertUser(me);
+            });
+
+
+            startActivity(HomePage);
+        }
     }
+
 }

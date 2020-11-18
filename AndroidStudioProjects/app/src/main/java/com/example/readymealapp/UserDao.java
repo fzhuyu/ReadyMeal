@@ -3,6 +3,7 @@ package com.example.readymealapp;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
+import androidx.room.Ignore;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -23,13 +24,16 @@ public interface UserDao {
 
      */
 
-    @Query("SELECT First_Name FROM user WHERE ID = 0")
-    LiveData<User> findFirstName();
+    @Query("SELECT First_Name FROM User WHERE ID = 0")
+    String findFirstName();
 
     @Query("SELECT Last_Name FROM user WHERE ID = 0")
-    LiveData<User> findLastName();
+    String findLastName();
 
-    @Query("SELECT Food_Preference FROM user WHERE ID = 0")
+    @Query("SELECT Age FROM user WHERE ID = 0")
+    int findAge();
+
+    @Query("SELECT */*Food_Preference*/ FROM user WHERE ID = 0")
     LiveData<User> LoadFoodPref();
 
     @Query("SELECT BMI FROM user WHERE ID = 0")
@@ -37,6 +41,10 @@ public interface UserDao {
 
     @Query("SELECT Desired_Calories_Under FROM user WHERE ID = 0")
     int LoadCalories();
+
+    @Query("DELETE FROM user")
+    void NukeTable();
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUser(User person);
