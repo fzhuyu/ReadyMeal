@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         final String lname = "";
         final float[] Calories = {0};
         final float[] TotalCalories = {0};
-        final Meals UserMeal = new Meals();
 
 
         // retreiving data from Room for food preferences and calories based on name of user
@@ -95,23 +94,23 @@ public class MainActivity extends AppCompatActivity {
                                             TotalCalories[0] += foodfavJSON.getInt("calories");
 
                                             // if we have reached the max calories or all the main meals have been added to class "Meals" then we'll display everything in the Meals class
-                                            if (Local_db.userDao().LoadCalories(fname, lname) < TotalCalories[0] || (UserMeal.breakfast != "" && UserMeal.Lunch != "" && UserMeal.Dinner != ""))
+                                            if (Local_db.userDao().LoadCalories(fname, lname) < TotalCalories[0] || (Meals.breakfast != "" && Meals.Lunch != "" && Meals.Dinner != ""))
                                             {
                                                 // display to user the info about their meal plan
                                             }
                                             else
                                             {
                                                 // looks to see if breakfast, lunch, and dinner have been fulfilled yet
-                                                if (UserMeal.breakfast == "")
+                                                if (Meals.breakfast == "")
                                                 {
-                                                    UserMeal.breakfast = foodfavJSON.getString("description");
-                                                    UserMeal.breakCal = foodfavJSON.getInt("calories");;
+                                                    Meals.breakfast = foodfavJSON.getString("description");
+                                                    Meals.breakCal = foodfavJSON.getInt("calories");;
                                                     break;
                                                 }
-                                                else if(UserMeal.Lunch == "")
+                                                else if(Meals.Lunch == "")
                                                 {
-                                                    UserMeal.Lunch = foodfavJSON.getString("description");
-                                                    UserMeal.mainCalLunch = foodfavJSON.getInt("calories");
+                                                    Meals.Lunch = foodfavJSON.getString("description");
+                                                    Meals.mainCalLunch = foodfavJSON.getInt("calories");
 
                                                     // does search for veggies for meal, commented out cuz don't know if it can be implemented yet
                                                     /*
@@ -123,18 +122,18 @@ public class MainActivity extends AppCompatActivity {
                                                         if (vegStr == "Broccoli" || vegStr == "Green Beans")
                                                         {
                                                             TotalCalories[0] += veggieJSON.getInt("calories");
-                                                            UserMeal.VeggiesLunch = vegStr;
-                                                            UserMeal.vegCalLunch = veggieJSON.getInt("calories");
+                                                            Meals.VeggiesLunch = vegStr;
+                                                            Meals.vegCalLunch = veggieJSON.getInt("calories");
                                                             break;
                                                         }
                                                     }
                                                     */
                                                     break;
                                                 }
-                                                else if(UserMeal.Dinner == "")
+                                                else if(Meals.Dinner == "")
                                                 {
-                                                    UserMeal.Dinner = foodfavJSON.getString("description");
-                                                    UserMeal.mainCalDinner = foodfavJSON.getInt("calories");
+                                                    Meals.Dinner = foodfavJSON.getString("description");
+                                                    Meals.mainCalDinner = foodfavJSON.getInt("calories");
                                                     break;
                                                 }
                                             }
