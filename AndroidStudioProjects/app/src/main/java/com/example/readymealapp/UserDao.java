@@ -12,26 +12,31 @@ import java.util.List;
 
 @Dao
 public interface UserDao {
-    @Query("SELECT * FROM user")
+
+    /*@Query("SELECT * FROM user")
     List<User> getAll();
 
-    @Query("SELECT * FROM user WHERE UserID IN (:userIds)")
+     */
+
+    /*@Query("SELECT * FROM user WHERE PriKey IN (:userIds)")
     List<User> loadAllByIds(int[] userIds);
 
-    @Query("SELECT * FROM user WHERE First_Name LIKE (:FName)")
-    LiveData<User> findFirstName(String FName);
+     */
 
-    @Query("SELECT * FROM user WHERE Last_Name LIKE (:LName)")
-    LiveData<User> findLastName(String LName);
+    @Query("SELECT First_Name FROM user WHERE ID = 0")
+    LiveData<User> findFirstName();
 
-    @Query("SELECT * FROM user WHERE Food_Preference IN (:FName) AND (:LName)")
-    LiveData<User> LoadFoodPref(String FName, String LName);
+    @Query("SELECT Last_Name FROM user WHERE ID = 0")
+    LiveData<User> findLastName();
 
-    @Query("SELECT * FROM user WHERE BMI IN (:FName) AND (:LName)")
-    int LoadBMI(String FName, String LName);
+    @Query("SELECT Food_Preference FROM user WHERE ID = 0")
+    LiveData<User> LoadFoodPref();
 
-    @Query("SELECT * FROM user WHERE Desired_Calories_Under IN (:FName) AND (:LName)")
-    int LoadCalories(String FName, String LName);
+    @Query("SELECT BMI FROM user WHERE ID = 0")
+    int LoadBMI();
+
+    @Query("SELECT Desired_Calories_Under FROM user WHERE ID = 0")
+    int LoadCalories();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUser(User person);
