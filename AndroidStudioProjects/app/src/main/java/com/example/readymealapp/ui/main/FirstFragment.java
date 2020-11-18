@@ -1,4 +1,4 @@
-package com.example.readymealapp;
+package com.example.readymealapp.ui.main;
 
 
 
@@ -15,7 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.readymealapp.ui.main.PageViewModel;
+import com.example.readymealapp.R;
+import com.example.readymealapp.UserInput;
 
 public class FirstFragment extends Fragment implements View.OnClickListener {
 
