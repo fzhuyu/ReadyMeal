@@ -28,13 +28,13 @@ public interface UserDao {
     LiveData<User> LoadFoodPref(String FName, String LName);
 
     @Query("SELECT * FROM user WHERE BMI IN (:FName) AND (:LName)")
-    LiveData<User> LoadBMI(String FName, String LName);
+    int LoadBMI(String FName, String LName);
 
     @Query("SELECT * FROM user WHERE Desired_Calories_Under IN (:FName) AND (:LName)")
-    LiveData<User> LoadCalories(String FName, String LName);
+    int LoadCalories(String FName, String LName);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void insertUser(User... users);
+    void insertUser(User person);
 
     @Insert
     void insertAll(User... users);

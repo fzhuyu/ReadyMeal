@@ -3,7 +3,6 @@ package com.example.readymealapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -15,18 +14,22 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+
+import com.example.readymealapp.ui.main.Meals;
+
 import com.example.readymealapp.ui.main.SectionsPagerAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.StringTokenizer;
+
 public class MainActivity extends AppCompatActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -38,21 +41,29 @@ public class MainActivity extends AppCompatActivity {
         //FloatingActionButton fab = findViewById(R.id.fab);
 
 
-        // name can be retreived from userinput page or something
-        String fname = "";
-        String lname = "";
+
+        // fname and lname can be retreived from userinput page or something
+        final String fname = "";
+        final String lname = "";
+        final float[] Calories = {0};
+        final float[] TotalCalories = {0};
+        final Meals UserMeal = new Meals();
+
 
         // retreiving data from Room for food preferences and calories based on name of user
-        AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
+        final AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
 
         // this gets user's food preference by setting the value to an instance of a User class
         final LiveData<User> userFood = Local_db.userDao().LoadFoodPref(fname, lname);
+        //User me = new User();
+        //Local_db.userDao().insertUser(me);
 
         /////// code for using a GET request for JSON object from API ///////
         ////////////////////////////////////////////////////////////////////
         try
         {
-            // Defnition for JSON request
+            // Defnition for JSON GET request
+            //////// if for some reason the current URL doesn't work, then try this: "https://nal.altarama.com/reft100.aspx?key=FoodData"
             RequestQueue ReqQ = Volley.newRequestQueue(this);
             JsonObjectRequest ObjReq = new JsonObjectRequest(
                     Request.Method.GET,
@@ -70,25 +81,77 @@ public class MainActivity extends AppCompatActivity {
                                 // loop through this jsonArray to look for the user's food
                                 for (int i = 0; i < jsonArray.length(); i++)
                                 {
-                                    // set JSON object equal to foodfav
-                                    JSONObject foodfav = jsonArray.getJSONObject(i);
+                                    // set JSON object equal to foodfavJSON
+                                    JSONObject foodfavJSON = jsonArray.getJSONObject(i);
+                                    String foodName = foodfavJSON.getString("description"); // title of the food basically
+                                    StringTokenizer tokFood = new StringTokenizer(foodName); // tokenizes string to find the keyword, ie food preference
 
-                                    String foodName = foodfav.getString("description");
+                                    // when string is parsed, look for the keyword for user
+                                    while (tokFood.hasMoreTokens())
+                                    {
+                                        // if food name found in request equals the user's food preference, then store the calories
+                                        if (tokFood.nextToken().equals(userFood.toString()))
+                                        {
+                                            TotalCalories[0] += foodfavJSON.getInt("calories");
 
-                                    // if food name found in request equals the user's food preference, then store the calories to
-                                    if (foodName.equals(userFood.toString())) {
-                                        int Calories = foodfav.getInt("calories");
-                                        break;
+                                            // if we have reached the max calories or all the main meals have been added to class "Meals" then we'll display everything in the Meals class
+                                            if (Local_db.userDao().LoadCalories(fname, lname) < TotalCalories[0] || (UserMeal.breakfast != "" && UserMeal.Lunch != "" && UserMeal.Dinner != ""))
+                                            {
+                                                // display to user the info about their meal plan
+                                            }
+                                            else
+                                            {
+                                                // looks to see if breakfast, lunch, and dinner have been fulfilled yet
+                                                if (UserMeal.breakfast == "")
+                                                {
+                                                    UserMeal.breakfast = foodfavJSON.getString("description");
+                                                    UserMeal.breakCal = foodfavJSON.getInt("calories");;
+                                                    break;
+                                                }
+                                                else if(UserMeal.Lunch == "")
+                                                {
+                                                    UserMeal.Lunch = foodfavJSON.getString("description");
+                                                    UserMeal.mainCalLunch = foodfavJSON.getInt("calories");
+
+                                                    // does search for veggies for meal, commented out cuz don't know if it can be implemented yet
+                                                    /*
+                                                    for (int j = 0; j < jsonArray.length(); j++)
+                                                    {
+                                                        JSONObject veggieJSON = jsonArray.getJSONObject(i);
+                                                        String vegStr = veggieJSON.getString("description"); // title of the food
+
+                                                        if (vegStr == "Broccoli" || vegStr == "Green Beans")
+                                                        {
+                                                            TotalCalories[0] += veggieJSON.getInt("calories");
+                                                            UserMeal.VeggiesLunch = vegStr;
+                                                            UserMeal.vegCalLunch = veggieJSON.getInt("calories");
+                                                            break;
+                                                        }
+                                                    }
+                                                    */
+                                                    break;
+                                                }
+                                                else if(UserMeal.Dinner == "")
+                                                {
+                                                    UserMeal.Dinner = foodfavJSON.getString("description");
+                                                    UserMeal.mainCalDinner = foodfavJSON.getInt("calories");
+                                                    break;
+                                                }
+                                            }
+
+                                        }
+                                        // else, don't set the calories
                                     }
-                                    // else, don't set the calories
+                                    // end of while loop token
                                 }
-                                // will write store/show info to user
+                                // end of for loop
                             }
+                            // end of try
                             catch(JSONException e) {
                                 e.printStackTrace();
                             }
                         }
-                    },
+                    }, // end of API listener description
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
@@ -96,19 +159,16 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
             );
-
-            /////////////////////// this actually does the GET Request /////////////////////////////
+            //  |
+            //  V  this actually does the GET Request
             //ReqQ.add(ObjReq);
-
 
         }
         catch (NullPointerException e)
         {
             e.printStackTrace();
         }
-
-        /////// end of code I added for GET Request ///////
-        //////////////////////////////////////////
+        
 
         /*
         fab.setOnClickListener(new View.OnClickListener() {
