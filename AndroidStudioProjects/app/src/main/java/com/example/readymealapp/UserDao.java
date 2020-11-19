@@ -22,21 +22,18 @@ public interface UserDao {
     List<User> loadAllByIds(int[] userIds);
      */
 
-/*<<<<<<< Updated upstream
+//<<<<<<< Updated upstream
     @Query("SELECT First_Name FROM User WHERE ID = 0")
     String findFirstName();
 
     @Query("SELECT Last_Name FROM user WHERE ID = 0")
     String findLastName();
 
- */
-
     @Query("SELECT Age FROM user WHERE ID = 0")
     int findAge();
 
     /*@Query("SELECT * Food_Preference FROM user WHERE ID = 0")
     LiveData<User> LoadFoodPref();
-    */
 
 //=======
     @Query("SELECT First_Name FROM user WHERE ID = 0")
@@ -44,6 +41,8 @@ public interface UserDao {
 
     @Query("SELECT Last_Name FROM user WHERE ID = 0")
     LiveData<String> findLastName();
+
+     */
 
     @Query("SELECT Food_Preference FROM user WHERE ID = 0")
     LiveData<String> LoadFoodPref();
