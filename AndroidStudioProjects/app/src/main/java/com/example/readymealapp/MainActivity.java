@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         final AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
 
         // this gets user's food preference by setting the value to an instance of a User class
-        final LiveData<User> userFood = Local_db.userDao().LoadFoodPref();
+        final LiveData<String> userFood = Local_db.userDao().LoadFoodPref();
 
         //User me = new User();
         //Local_db.userDao().insertUser(me);
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                                     while (tokFood.hasMoreTokens())
                                     {
                                         // if food name found in request equals the user's food preference, then store the calories
-                                        if (tokFood.nextToken().equals(userFood.toString()))
+                                        if (tokFood.nextToken().equals(userFood))
                                         {
                                             TotalCalories[0] += foodfavJSON.getInt("calories");
 

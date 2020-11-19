@@ -14,27 +14,40 @@ import java.util.List;
 @Dao
 public interface UserDao {
 
-    /*@Query("SELECT * FROM user")
+    /*
+    @Query("SELECT * FROM user")
     List<User> getAll();
 
-     */
-
-    /*@Query("SELECT * FROM user WHERE PriKey IN (:userIds)")
+    @Query("SELECT * FROM user WHERE PriKey IN (:userIds)")
     List<User> loadAllByIds(int[] userIds);
-
      */
 
+/*<<<<<<< Updated upstream
     @Query("SELECT First_Name FROM User WHERE ID = 0")
     String findFirstName();
 
     @Query("SELECT Last_Name FROM user WHERE ID = 0")
     String findLastName();
 
+ */
+
     @Query("SELECT Age FROM user WHERE ID = 0")
     int findAge();
 
-    @Query("SELECT */*Food_Preference*/ FROM user WHERE ID = 0")
+    /*@Query("SELECT * Food_Preference FROM user WHERE ID = 0")
     LiveData<User> LoadFoodPref();
+    */
+
+//=======
+    @Query("SELECT First_Name FROM user WHERE ID = 0")
+    LiveData<String> findFirstName();
+
+    @Query("SELECT Last_Name FROM user WHERE ID = 0")
+    LiveData<String> findLastName();
+
+    @Query("SELECT Food_Preference FROM user WHERE ID = 0")
+    LiveData<String> LoadFoodPref();
+//>>>>>>> Stashed changes
 
     @Query("SELECT BMI FROM user WHERE ID = 0")
     int LoadBMI();
