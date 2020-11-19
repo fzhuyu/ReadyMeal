@@ -1,11 +1,10 @@
 package com.example.readymealapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
-import androidx.room.Room;
-
 import android.os.Bundle;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -29,7 +28,7 @@ public class HomePage extends AppCompatActivity {
             final int userAge = Local_db.userDao().findAge();
             TextView GreetUser;
             GreetUser = findViewById(R.id.userGreeting);
-            GreetUser.setText("Hello\t" + userFirstName + ' ' + userLastName + "\nYour Age is: " + userAge);
+            GreetUser.setText("Hello,\t" + userFirstName + ' ' + userLastName + "\nYour Age is: " + userAge);
         });
 
 
