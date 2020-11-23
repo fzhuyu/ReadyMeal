@@ -1,6 +1,8 @@
 package com.example.readymealapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,5 +36,10 @@ public class HomePage extends AppCompatActivity {
 
 
 
+    }
+
+    public void goToUserInputData(View view) {
+        Intent UserInputActivity = new Intent (this, UserInput.class);
+        startActivity(UserInputActivity);
     }
 }
