@@ -28,9 +28,13 @@ public class HomePage extends AppCompatActivity {
             final String userFirstName = Local_db.userDao().findFirstName();
             final String userLastName = Local_db.userDao().findLastName();
             final int userAge = Local_db.userDao().findAge();
+            final int userBMI = Local_db.userDao().LoadBMI();
             TextView GreetUser;
             GreetUser = findViewById(R.id.userGreeting);
-            GreetUser.setText("Hello,\t" + userFirstName + ' ' + userLastName + "\nYour Age is: " + userAge);
+            GreetUser.setText("Hello,\t" + userFirstName + ' ' + userLastName
+                                + "\nYour Age is: " + userAge
+                                + "\nYour BMI is: " + userBMI);
+
         });
 
 
