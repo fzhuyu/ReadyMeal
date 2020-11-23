@@ -45,4 +45,13 @@ public class Meals
         vegCalDinner = 0;
         carbCalDinner = 0;
     }
+
+    public int TotalCalories()
+    {
+        int Total = 0;
+
+        Total += breakCal + mainCalLunch + vegCalLunch + carbCalLunch + mainCalDinner + vegCalDinner + carbCalDinner;
+
+        return Total;
+    }
 }

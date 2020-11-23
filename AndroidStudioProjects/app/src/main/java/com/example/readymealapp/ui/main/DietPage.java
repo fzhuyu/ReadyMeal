@@ -72,19 +72,20 @@ public class DietPage extends AppCompatActivity {
                                     // when string is parsed, look for the keyword for user
                                     while (tokFood.hasMoreTokens())
                                     {
-                                        // if food name found in request equals the user's food preference, then store the calories
+                                        // if the tokenized food name found in request equals the user's food preference, then store the calories
                                         if (tokFood.nextToken().equals(userFood))
                                         {
                                             TotalCalories[0] += foodfavJSON.getInt("calories");
 
-                                            // if we have reached the max calories or all the main meals have been added to class "Meals" then we'll display everything in the Meals class
-                                            if (Local_db.userDao().LoadCalories() < TotalCalories[0] || (Meals.breakfast != "" && Meals.Lunch != "" && Meals.Dinner != ""))
+                                            // if we have reached the max calories OR all the main meals have been added to class "Meals" then we'll display everything in the Meals class
+                                            if (Local_db.userDao().LoadCalories() <= TotalCalories[0] || (Meals.breakfast != "" && Meals.Lunch != "" && Meals.Dinner != ""))
                                             {
                                                 // display to user the info about their meal plan
                                             }
                                             else
                                             {
                                                 // looks to see if breakfast, lunch, and dinner have been fulfilled yet
+                                                // if not fulfilled it'll set the name of the food to the Meal's static string and set that meal's calories too
                                                 if (Meals.breakfast == "")
                                                 {
                                                     Meals.breakfast = foodfavJSON.getString("description");
@@ -127,7 +128,7 @@ public class DietPage extends AppCompatActivity {
                                     }
                                     // end of while loop token
                                 }
-                                // end of for loop
+                                // end of JSON for loop
                             }
                             // end of try in case JSON Request is invalid or something
                             catch(JSONException e) {
@@ -154,6 +155,5 @@ public class DietPage extends AppCompatActivity {
 
 
     }
-
 
 }
