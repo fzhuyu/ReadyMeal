@@ -29,7 +29,7 @@ public class User {
     public int UserAge;
 
     @ColumnInfo(name = "BMI")
-    public int UserBMI;
+    public double UserBMI;
 
     @ColumnInfo(name = "Desired_Calories_Under")
     public int Calories;

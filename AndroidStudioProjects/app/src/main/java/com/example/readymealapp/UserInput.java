@@ -1,6 +1,7 @@
 package com.example.readymealapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
 import android.content.Context;
@@ -102,10 +103,16 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
             userAge = Integer.parseInt(StringAge);
             me.UserAge = userAge;
 
+            ////////////// this is a test
+                double test = 12.41;
+                me.UserBMI = test;
+
+
             //Save to database
             Executor myExecutor = Executors.newSingleThreadExecutor();
             myExecutor.execute(() -> {
                 Local_db.userDao().insertUser(me);
+                double testTwo = Local_db.userDao().LoadBMI(); ////// end of test
             });
 
 

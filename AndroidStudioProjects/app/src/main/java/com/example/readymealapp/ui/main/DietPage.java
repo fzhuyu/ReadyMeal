@@ -1,6 +1,5 @@
 package com.example.readymealapp.ui.main;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +19,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.StringTokenizer;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class DietPage extends AppCompatActivity {
@@ -31,6 +33,9 @@ public class DietPage extends AppCompatActivity {
         setContentView(R.layout.diet);
 
         final float[] TotalCalories = {0};
+
+        // an atomicinteger UserCalories AndroidStudio created so LoadCalories can set its return val to UserCalories
+        AtomicInteger UserCalories = new AtomicInteger();
 
         // retreiving data from Room for food preferences and calories based on name of user
         final AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
@@ -77,8 +82,15 @@ public class DietPage extends AppCompatActivity {
                                         {
                                             TotalCalories[0] += foodfavJSON.getInt("calories");
 
+                                            // uses single thread executor to retrieve user's calorie preference and sets it to an AtomicInteger
+                                            Executor myExecutor = Executors.newSingleThreadExecutor();
+                                            myExecutor.execute(() -> {
+
+                                                UserCalories.set(Local_db.userDao().LoadCalories());
+                                            });
+
                                             // if we have reached the max calories OR all the main meals have been added to class "Meals" then we'll display everything in the Meals class
-                                            if (Local_db.userDao().LoadCalories() <= TotalCalories[0] || (Meals.breakfast != "" && Meals.Lunch != "" && Meals.Dinner != ""))
+                                            if (UserCalories.get() <= TotalCalories[0] || (Meals.breakfast != "" && Meals.Lunch != "" && Meals.Dinner != ""))
                                             {
                                                 // display to user the info about their meal plan
                                             }
