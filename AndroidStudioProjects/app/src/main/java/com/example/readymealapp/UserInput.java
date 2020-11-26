@@ -57,6 +57,8 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
     public void goToHomePage(View v){
         Intent HomePage = new Intent (this, HomePage.class);
         int userAge = 0;
+        int userHeight = 0;
+        int userWeight = 0;
 
         //Creating a variable for first name
         EditText fNameEditText = findViewById(R.id.fName);
@@ -71,22 +73,45 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
         EditText TextAge = findViewById(R.id.editTextAge);
         String StringAge = TextAge.getText().toString();
 
+        //Height
+        EditText heightFeet = findViewById(R.id.heightFeet);
+        String heightFt = heightFeet.getText().toString();
+        EditText heightInches = findViewById(R.id.heightInches);
+        String heightIn = heightInches.getText().toString();
+
+        //Age
+        EditText weight = findViewById(R.id.weight);
+        String weightLb = weight.getText().toString();
+
         //if First Name is empty
         if (userfName.matches("")) {
             Toast.makeText(this, "First Name is Empty", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        else if (userlName.matches("")) {
+        if (userlName.matches("")) {
             Toast.makeText(this, "Last Name is Empty", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        else if (StringAge.isEmpty())
+        if (StringAge.isEmpty() || StringAge.equals("0"))
         {
             Toast.makeText(this, "Age is Invalid", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        if (heightFt.isEmpty() || heightIn.isEmpty() || heightFt.equals("0"))
+        {
+            Toast.makeText(this, "Height is Empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (weightLb.isEmpty() || weightLb.equals("0"))
+        {
+            Toast.makeText(this, "Weight is Empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
 
         //else save the user name and go to home page
         else
@@ -96,16 +121,34 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
             //creating the user
             User me = new User();
 
+            //------name------
             //add the user first name into the database
             me.FName = userfName;
             me.LName = userlName;
+
+            //------age--------
             //convert age to int
             userAge = Integer.parseInt(StringAge);
             me.UserAge = userAge;
 
-            ////////////// this is a test
-                double test = 12.41;
-                me.UserBMI = test;
+            //-----height------
+            //convert feet to inches and added them and save them to height, if the inches = 0, only calculate feet
+            if(heightIn.equals("0"))
+                {
+                    userHeight = (0 + Integer.parseInt(heightFt)*12);
+                }
+            else
+                {
+                    userHeight = (Integer.parseInt(heightIn) + Integer.parseInt(heightFt)*12);
+                }
+
+            //------weight------
+            //convert weightLb to integer
+            userWeight = Integer.parseInt(weightLb);
+
+            //-------BMI--------
+            //calculate BMI and save to database
+            me.UserBMI = (((703)*(userWeight))/(userHeight*userHeight));
 
 
             //Save to database

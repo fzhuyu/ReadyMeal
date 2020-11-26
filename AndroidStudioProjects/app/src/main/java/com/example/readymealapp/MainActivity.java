@@ -3,21 +3,8 @@ package com.example.readymealapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
-import androidx.room.Room;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-
-import com.example.readymealapp.ui.main.Meals;
 
 import com.example.readymealapp.ui.main.SectionsPagerAdapter;
 
@@ -57,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         Intent UserInputActivity = new Intent (this, UserInput.class);
         startActivity(UserInputActivity);
     }
+
     /*
     //goes to Main Activity, will be changed to Home after home is implemented, this is the submit button function
     //on the User Input page

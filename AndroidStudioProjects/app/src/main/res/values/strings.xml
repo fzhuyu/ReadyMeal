@@ -17,12 +17,23 @@
     <string name="Title2">Height</string>
     <string name="Title3">Weight</string>
     <string name="Title4">Sex</string>
-    <string name="Title5">Physical Activity</string>
+    <string name="Title5">Physical\nActivity</string>
+    <string name="Title6">First Name</string>
+    <string name="Title7">Last Name</string>
+    <string name="Title8">Favorite\nFood</string>
+    <string name="Title9">Daily\nCaloric\nGoal</string>
+    <string name="Title10">feet</string>
+    <string name="Title11">inches</string>
+
     <string name="AgeHint">18</string>
+    <string name="CaloricHint">2500</string>
     <string name="HeightHint">centimeters</string>
     <string name="WeightHint">pounds</string>
     <string name="SubmitButton">Submit</string>
     <string name="UserInputButton">User Input</string>
+    <string name="UserInputTitle">User Data</string>
+    <string name="UserInputDescription">Welcome to ReadyMeal!\nEnter your personal data for a more customized user experience</string>
+
     <string-array name="sex">
         <item>Male</item>
         <item>Female</item>
