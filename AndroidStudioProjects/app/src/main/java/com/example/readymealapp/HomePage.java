@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.room.Room;
 
 import java.util.concurrent.Executor;
@@ -18,9 +17,6 @@ public class HomePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homepage);
-        CardView dietcard = (CardView) findViewById(R.id.diet_card);
-
-        //dietcard.setOnClickListener(this);
 
         //instantiating the database
         final AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
@@ -43,32 +39,23 @@ public class HomePage extends AppCompatActivity {
 
     }
 
+    //Function that will take you from the homepage to the UserInput (go back/restart)
     public void goToUserInputData(View view) {
         Intent UserInputActivity = new Intent (this, UserInput.class);
         startActivity(UserInputActivity);
     }
 
+    //Function that will take you from the homepage to the DailyDiet page from clicking the cardview
     public void goToDailyDiet(View view){
         Intent DailyDietActivity = new Intent (this, DailyDiet.class);
         startActivity(DailyDietActivity);
     }
 
-
-/*
-    @Override
-    public void onClick(View view) {
-        Intent i;
-
-        switch (view.getId()){
-            case R.id.diet_card:
-                i = new Intent(this, DailyDiet.class);
-                startActivity(i);
-                break;
-
-            default:
-                break;
-        }
+    //Function that will take you from the homepage to the Statistics Page from clicking the cardview
+    public void goToStatistics(View view){
+        Intent StatisticsPageActivity = new Intent (this, StatisticsPage.class);
+        startActivity(StatisticsPageActivity);
     }
-    */
+
 
 }

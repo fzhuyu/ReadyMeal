@@ -15,6 +15,9 @@
         tools:replace="android:allowBackup">
         <activity android:name=".HomePage" />
         <activity
+            android:name=".StatisticsPage"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".UserInput"
             android:label="@string/title_activity_user_input"
             android:theme="@style/AppTheme.NoActionBar" />

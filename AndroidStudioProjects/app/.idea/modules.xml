@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/446521447/ReadyMealApp.iml" filepath="$PROJECT_DIR$/.idea/modules/446521447/ReadyMealApp.iml" group="ReadyMealApp" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app.iml" group="ReadyMealApp/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/446521447/ReadyMealApp.iml" filepath="$PROJECT_DIR$/.idea/modules/446521447/ReadyMealApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ReadyMealApp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/ReadyMealApp.app.iml" />
     </modules>
   </component>
 </project>
