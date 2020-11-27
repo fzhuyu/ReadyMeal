@@ -78,7 +78,7 @@ public class DietPage extends AppCompatActivity {
                                     while (tokFood.hasMoreTokens())
                                     {
                                         // if the tokenized food name found in request equals the user's food preference, then store the calories
-                                        if (tokFood.nextToken().equals(userFood))
+                                        if (tokFood.nextToken().toLowerCase().equals(userFood.toLowerCase()))
                                         {
                                             TotalCalories[0] += foodfavJSON.getInt("calories");
 
