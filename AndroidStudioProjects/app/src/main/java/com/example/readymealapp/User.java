@@ -32,7 +32,14 @@ public class User {
     public double UserBMI;
 
     @ColumnInfo(name = "Desired_Calories_Under")
-    public int Calories;
+    public int DesiredCalories;
+
+    @ColumnInfo(name = "Current_Calories")
+    public int CurrentCalories;
+
+    @ColumnInfo(name = "Activity")
+    public String UserActivity;
+
 
     /*public User(int UserID, String FName, String LName, String FoodFav, String UserSex, int UserAge, int UserBMI, int Calories)
     {

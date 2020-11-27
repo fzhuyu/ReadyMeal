@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.main.DataDisplay"></activity>
         <activity android:name=".HomePage" />
         <activity
             android:name=".UserInput"
@@ -18,7 +19,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".DailyDiet"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

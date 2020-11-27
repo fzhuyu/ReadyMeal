@@ -21,10 +21,6 @@ import java.util.concurrent.Executors;
 public class UserInput extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,11 +51,15 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
     }
 
     public void goToHomePage(View v){
-        Intent HomePage = new Intent (this, HomePage.class);
         int userAge = 0;
         int userHeight = 0;
         int userWeight = 0;
 
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------User input to Database----------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        //----------------------------------------------------------------retrieving data from textview/spinner to convert to string---------------------------------------
         //Creating a variable for first name
         EditText fNameEditText = findViewById(R.id.fName);
         //save first name to a variable
@@ -83,6 +83,23 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
         EditText weight = findViewById(R.id.weight);
         String weightLb = weight.getText().toString();
 
+        //Favorite Food
+        EditText faveFood = findViewById(R.id.favoriteFood);
+        String favFood = faveFood.getText().toString();
+
+        //Sex
+        Spinner userSex = (Spinner) findViewById(R.id.spinner);
+        String sex = userSex.getSelectedItem().toString();
+
+        //User Desired Calories
+        EditText calories = findViewById(R.id.caloricGoal);
+        String caloricGoal = calories.getText().toString();
+
+        //Physical Activity
+        Spinner userPhysicalActivity = (Spinner) findViewById(R.id.spinner2);
+        String userActivity = userPhysicalActivity.getSelectedItem().toString();
+
+        //-----------------------------------------------------------------Check if the input is empty or null--------------------------------------------
         //if First Name is empty
         if (userfName.matches("")) {
             Toast.makeText(this, "First Name is Empty", Toast.LENGTH_SHORT).show();
@@ -112,10 +129,19 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
             return;
         }
 
+        if (favFood.matches("")) {
+            Toast.makeText(this, "Favorite Food is Empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        //else save the user name and go to home page
-        else
-            {
+        if (caloricGoal.isEmpty() || caloricGoal.equals("0"))
+        {
+            Toast.makeText(this, "Calories is Empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //-------------------------------------------------save the user data to the database--------------------------------------------------------
+
             //instantiating the database
             final AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
             //creating the user
@@ -131,6 +157,8 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
             userAge = Integer.parseInt(StringAge);
             me.UserAge = userAge;
 
+
+//---------------------------BMI---------------------------
             //-----height------
             //convert feet to inches and added them and save them to height, if the inches = 0, only calculate feet
             if(heightIn.equals("0"))
@@ -149,18 +177,42 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
             //-------BMI--------
             //calculate BMI and save to database
             me.UserBMI = (((703)*(userWeight))/(userHeight*userHeight));
+//---------------------------BMI---------------------------
+
+            //------Favorite Food------
+            //add the user's favorite food into the database
+            me.FoodFav = favFood;
+
+            //--------Sex--------
+            //add the user's favorite food into the database
+            me.UserSex = sex;
+
+            //--------Caloric Goal--------
+            //add the user's sex into the database
+            me.DesiredCalories = Integer.parseInt(caloricGoal);
+
+            //-----Physical Activity-----
+            //add the user's favorite food into the database
+            me.UserActivity = userActivity;
 
 
+            //-----------------------------Save the data to the user Database------------------------------
             //Save to database
             Executor myExecutor = Executors.newSingleThreadExecutor();
             myExecutor.execute(() -> {
                 Local_db.userDao().insertUser(me);
-                double testTwo = Local_db.userDao().LoadBMI(); ////// end of test
             });
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------User input to Database----------------------------------------------------------------
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+        //Go to home from user input, code for the button
+        Intent HomePage = new Intent (this, HomePage.class);
             startActivity(HomePage);
-        }
+
+
+
     }
 
 }

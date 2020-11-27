@@ -45,14 +45,23 @@ public interface UserDao {
      */
 
     @Query("SELECT Food_Preference FROM user WHERE ID = 0")
-    LiveData<String> LoadFoodPref();
+    String LoadFoodPref();
 //>>>>>>> Stashed changes
 
     @Query("SELECT BMI FROM user WHERE ID = 0")
     double LoadBMI();
 
+    @Query("SELECT Sex FROM user WHERE ID = 0")
+    String LoadSex();
+
+    @Query("SELECT Activity FROM user WHERE ID = 0")
+    String LoadActivity();
+
     @Query("SELECT Desired_Calories_Under FROM user WHERE ID = 0")
-    int LoadCalories();
+    int LoadDesiredCalories();
+
+    @Query("SELECT Current_Calories FROM user WHERE ID = 0")
+    int LoadCurrentCalories();
 
     @Query("DELETE FROM user")
     void NukeTable();

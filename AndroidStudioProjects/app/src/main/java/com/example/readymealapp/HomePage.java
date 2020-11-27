@@ -7,7 +7,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
+
+import com.example.readymealapp.ui.main.DataDisplay;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -30,13 +33,9 @@ public class HomePage extends AppCompatActivity {
         myExecutor.execute(() -> {
             final String userFirstName = Local_db.userDao().findFirstName();
             final String userLastName = Local_db.userDao().findLastName();
-            final int userAge = Local_db.userDao().findAge();
-            final double userBMI = Local_db.userDao().LoadBMI();
             TextView GreetUser;
             GreetUser = findViewById(R.id.userGreeting);
-            GreetUser.setText("Hello,\t" + userFirstName + ' ' + userLastName
-                                + "\nYour Age is: " + userAge
-                                + "\nYour BMI is: " + userBMI);
+            GreetUser.setText("Hello,\t" + userFirstName + ' ' + userLastName);
 
         });
 
@@ -51,6 +50,11 @@ public class HomePage extends AppCompatActivity {
     public void goToDailyDiet(View view){
         Intent DailyDietActivity = new Intent (this, DailyDiet.class);
         startActivity(DailyDietActivity);
+    }
+
+    public void goToDataDisplay(View view){
+        Intent DataDisplayActivity = new Intent (this, DataDisplay.class);
+        startActivity(DataDisplayActivity);
     }
 
 

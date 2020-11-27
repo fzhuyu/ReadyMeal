@@ -41,7 +41,7 @@ public class DietPage extends AppCompatActivity {
         final AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
 
         // this gets user's food preference by setting the value to an instance of a User class
-        final LiveData<String> userFood = Local_db.userDao().LoadFoodPref();
+        final String userFood = Local_db.userDao().LoadFoodPref();
 
         //User me = new User();
         //Local_db.userDao().insertUser(me);
@@ -86,7 +86,7 @@ public class DietPage extends AppCompatActivity {
                                             Executor myExecutor = Executors.newSingleThreadExecutor();
                                             myExecutor.execute(() -> {
 
-                                                UserCalories.set(Local_db.userDao().LoadCalories());
+                                                UserCalories.set(Local_db.userDao().LoadCurrentCalories());
                                             });
 
                                             // if we have reached the max calories OR all the main meals have been added to class "Meals" then we'll display everything in the Meals class

@@ -145,6 +145,8 @@
     <string name="last_name">Last Name</string>
     <string name="john">John</string>
     <string name="doe">Doe</string>
+    <string name="DataDisplayUserGreeting">User Greeting</string>
+    <string name="dataDisplayToHome">Home</string>
     <!-- =========================================Values for UserInput===================================================== -->
 
 
