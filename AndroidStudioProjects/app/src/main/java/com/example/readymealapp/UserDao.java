@@ -49,7 +49,7 @@ public interface UserDao {
 //>>>>>>> Stashed changes
 
     @Query("SELECT BMI FROM user WHERE ID = 0")
-    int LoadBMI();
+    double LoadBMI();
 
     @Query("SELECT Desired_Calories_Under FROM user WHERE ID = 0")
     int LoadCalories();
