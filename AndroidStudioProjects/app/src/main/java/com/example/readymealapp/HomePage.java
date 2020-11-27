@@ -60,7 +60,7 @@ public class HomePage extends AppCompatActivity {
     public void goToStatistics(View view){
         Intent StatisticsPageActivity = new Intent (this, StatisticsPage.class);
         startActivity(StatisticsPageActivity);
-    }
+    }}
 
 
 /*
@@ -75,3 +75,4 @@ public class HomePage extends AppCompatActivity {
 
 
 }
+*/
