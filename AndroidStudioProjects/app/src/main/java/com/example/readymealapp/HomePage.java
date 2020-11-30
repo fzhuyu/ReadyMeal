@@ -6,11 +6,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
 import com.example.readymealapp.ui.main.DataDisplay;
+import com.example.readymealapp.ui.main.StatisticsPage;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -33,7 +32,6 @@ public class HomePage extends AppCompatActivity {
             TextView GreetUser;
             GreetUser = findViewById(R.id.userGreeting);
             GreetUser.setText("Hello,\t" + userFirstName + ' ' + userLastName);
-
         });
 
 

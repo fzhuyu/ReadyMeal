@@ -1,17 +1,23 @@
-package com.example.readymealapp;
+package com.example.readymealapp.ui.main;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Pie;
+import com.example.readymealapp.AppDatabase;
+import com.example.readymealapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class StatisticsPage extends AppCompatActivity {
 
@@ -24,6 +30,41 @@ public class StatisticsPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.statistics);
+
+        final AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
+        //
+
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            //final String userFirstName = Local_db.userDao().findFirstName();
+            final int userAge = Local_db.userDao().findAge();
+            double userBMI = Local_db.userDao().LoadBMI();
+            final int prefCalories = Local_db.userDao().LoadDesiredCalories();
+
+            final String sex = Local_db.userDao().LoadSex();
+            final String userActivity = Local_db.userDao().LoadActivity();
+
+            TextView PrintUA;
+            PrintUA = findViewById(R.id.UA_out);
+            PrintUA.setText(userActivity);
+
+            TextView PrintSex;
+            PrintSex = findViewById(R.id.sex_out);
+            PrintSex.setText(sex);
+
+            TextView PrintBMI;
+            PrintBMI = findViewById(R.id.bmi_out);
+            PrintBMI.setText(Double.toString(userBMI));
+
+            TextView PrintGC;
+            PrintGC = findViewById(R.id.caloric_goal_out2);
+            PrintGC.setText(Integer.toString(prefCalories) + " cals");
+
+            TextView PrintAge;
+            PrintAge = findViewById(R.id.age_out);
+            PrintAge.setText(Integer.toString(userAge));
+
+        });
 
         //pieChart = findViewById(R.id.pie_chart);
 

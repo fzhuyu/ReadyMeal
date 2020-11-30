@@ -16,7 +16,7 @@
         <activity android:name=".ui.main.DataDisplay"></activity>
         <activity android:name=".HomePage" />
         <activity
-            android:name=".StatisticsPage"
+            android:name=".ui.main.StatisticsPage"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UserInput"
