@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
-        <activity android:name=".ui.main.DataDisplay"></activity>
+        <activity android:name=".ui.main.DataDisplay" />
         <activity android:name=".HomePage" />
         <activity
             android:name=".StatisticsPage"
@@ -24,6 +24,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".DailyDiet"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.main.DietPage"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"

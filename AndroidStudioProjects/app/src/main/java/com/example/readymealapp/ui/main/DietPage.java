@@ -1,6 +1,7 @@
 package com.example.readymealapp.ui.main;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -25,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class DietPage extends AppCompatActivity {
+    String userFood;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -41,9 +43,11 @@ public class DietPage extends AppCompatActivity {
         final AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
 
         // this gets user's food preference by setting the value to an instance of a User class
-        final String userFood = Local_db.userDao().LoadFoodPref();
-
-        //User me = new User();
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            userFood = Local_db.userDao().LoadFoodPref();
+        });
+                //User me = new User();
         //Local_db.userDao().insertUser(me);
 
         /////// code for using a GET request for JSON object from API ///////
@@ -80,6 +84,7 @@ public class DietPage extends AppCompatActivity {
                                         // if the tokenized food name found in request equals the user's food preference, then store the calories
                                         if (tokFood.nextToken().toLowerCase().equals(userFood.toLowerCase()))
                                         {
+
                                             TotalCalories[0] += foodfavJSON.getInt("calories");
 
                                             // uses single thread executor to retrieve user's calorie preference and sets it to an AtomicInteger
@@ -90,7 +95,7 @@ public class DietPage extends AppCompatActivity {
                                             });
 
                                             // if we have reached the max calories OR all the main meals have been added to class "Meals" then we'll display everything in the Meals class
-                                            if (UserCalories.get() <= TotalCalories[0] || (Meals.breakfast != "" && Meals.Lunch != "" && Meals.Dinner != ""))
+                                            if (UserCalories.floatValue() <= TotalCalories[0] || (Meals.breakfast != "" && Meals.Lunch != "" && Meals.Dinner != ""))
                                             {
                                                 // display to user the info about their meal plan
                                             }
