@@ -76,7 +76,9 @@ public class DietPage extends AppCompatActivity {
                             try {
                                 Log.d("myTag", "HWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
                                 // get an array of JSON objects that are Branded Food Items
-                                JSONArray jsonArray = response.getJSONArray("BrandedFoodItem");
+                                // JSONArray jsonArray = response.getJSONArray("BrandedFoodItem");
+
+                                JSONArray jsonArray = new JSONArray(response);
 
                                 // loop through this jsonArray to look for the user's food
                                 for (int i = 0; i < jsonArray.length(); i++)
@@ -84,6 +86,7 @@ public class DietPage extends AppCompatActivity {
                                     Log.d("myTag", "HXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
                                     // set JSON object equal to foodfavJSON
                                     JSONObject foodfavJSON = jsonArray.getJSONObject(i);
+
                                     String foodName = foodfavJSON.getString("description"); // title of the food basically
                                     StringTokenizer tokFood = new StringTokenizer(foodName); // tokenizes string to find the keyword, ie food preference
 
