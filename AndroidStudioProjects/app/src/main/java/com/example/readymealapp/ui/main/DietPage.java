@@ -1,6 +1,7 @@
 package com.example.readymealapp.ui.main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,9 +25,12 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static java.sql.DriverManager.println;
+
 
 public class DietPage extends AppCompatActivity {
     String userFood;
+    String breakfast = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -59,20 +63,21 @@ public class DietPage extends AppCompatActivity {
             RequestQueue ReqQ = Volley.newRequestQueue(this);
             JsonObjectRequest ObjReq = new JsonObjectRequest(
                     Request.Method.GET,
-                    "https://developer.nrel.gov/api/alt-fuel-stations/v1.json?limit=1&api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX",
+                    "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX",
                     null,
                     new Response.Listener<JSONObject>() {
 
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
-
+                                Log.d("myTag", "HWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
                                 // get an array of JSON objects that are Branded Food Items
                                 JSONArray jsonArray = response.getJSONArray("BrandedFoodItem");
 
                                 // loop through this jsonArray to look for the user's food
                                 for (int i = 0; i < jsonArray.length(); i++)
                                 {
+                                    Log.d("myTag", "HXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
                                     // set JSON object equal to foodfavJSON
                                     JSONObject foodfavJSON = jsonArray.getJSONObject(i);
                                     String foodName = foodfavJSON.getString("description"); // title of the food basically
@@ -81,10 +86,11 @@ public class DietPage extends AppCompatActivity {
                                     // when string is parsed, look for the keyword for user
                                     while (tokFood.hasMoreTokens())
                                     {
+                                        Log.d("TAAAAAAAAAAAG", "HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                                         // if the tokenized food name found in request equals the user's food preference, then store the calories
                                         if (tokFood.nextToken().toLowerCase().equals(userFood.toLowerCase()))
                                         {
-
+                                            Log.d("myTag", "HBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                                             TotalCalories[0] += foodfavJSON.getInt("calories");
 
                                             // uses single thread executor to retrieve user's calorie preference and sets it to an AtomicInteger
@@ -97,6 +103,7 @@ public class DietPage extends AppCompatActivity {
                                             // if we have reached the max calories OR all the main meals have been added to class "Meals" then we'll display everything in the Meals class
                                             if (UserCalories.floatValue() <= TotalCalories[0] || (Meals.breakfast != "" && Meals.Lunch != "" && Meals.Dinner != ""))
                                             {
+                                                breakfast = Meals.breakfast;
                                                 // display to user the info about their meal plan
                                             }
                                             else
@@ -106,7 +113,10 @@ public class DietPage extends AppCompatActivity {
                                                 if (Meals.breakfast == "")
                                                 {
                                                     Meals.breakfast = foodfavJSON.getString("description");
-                                                    Meals.breakCal = foodfavJSON.getInt("calories");;
+                                                    Meals.breakCal = foodfavJSON.getInt("calories");
+                                                    println("WE ARE HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE");
+                                                    println(foodfavJSON.getString("description"));
+                                                    println("WE ARE HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE");
                                                     break;
                                                 }
                                                 else if(Meals.Lunch == "")
@@ -156,7 +166,7 @@ public class DietPage extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            error.printStackTrace();
                         }
                     }
             );
@@ -170,7 +180,13 @@ public class DietPage extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
+        showText();
     }
 
+    private void showText()
+    {
+        TextView userMealTextView1;
+        userMealTextView1 = findViewById(R.id.userMealTextView);
+        userMealTextView1.setText("Hello, your breakfast is: \t" + breakfast);
+    }
 }
