@@ -188,8 +188,10 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
             me.UserSex = sex;
 
             //--------Caloric Goal--------
-            //add the user's sex into the database
+            //add the caloric goal into the database
             me.DesiredCalories = Integer.parseInt(caloricGoal);
+            //initialize current calories to 0
+            me.CurrentCalories = 0;
 
             //-----Physical Activity-----
             //add the user's favorite food into the database
