@@ -54,7 +54,7 @@ public class DietPage extends AppCompatActivity {
         myExecutor.execute(() -> {
             userFood[0] = Local_db.userDao().LoadFoodPref();
         });
-                //User me = new User();
+        //User me = new User();
         //User me = new User();
         //Local_db.userDao().insertUser(me);
 
@@ -65,9 +65,12 @@ public class DietPage extends AppCompatActivity {
 
 
             // Defnition for JSON GET request
-            //////// if for some reason the current URL doesn't work, then try this: "https://nal.altarama.com/reft100.aspx?key=FoodData" or "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX"
+            //////// if for some reason the current URL doesn't work, then try these:
+            // or "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX"
+            // or https://developer.nrel.gov/api/alt-fuel-stations/v1.json?limit=1&api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX
+
             RequestQueue ReqQ = Volley.newRequestQueue(this);
-            JsonArrayRequest ObjReq = new JsonArrayRequest(
+            JsonArrayRequest ArReq = new JsonArrayRequest(
                     Request.Method.GET,
                     "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX",
                     null,
@@ -77,18 +80,22 @@ public class DietPage extends AppCompatActivity {
                             try {
                                 Log.d("myTag", "HWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
                                 // get an array of JSON objects that are Branded Food Items
-                                // JSONArray jsonArray = response.getJSONArray("BrandedFoodItem");
+                                // JSONArray jsonArray = response.getJSONArray(0);
+                                // JSONArray jsonArray = new JSONArray(response);
 
-                                JSONArray jsonArray = new JSONArray(response);
+                                // JsonObjectRequest Jobj = response.getJSONObject();
 
                                 // loop through this jsonArray to look for the user's food
-                                for (int i = 0; i < jsonArray.length(); i++)
+                                for (int i = 0; i < response.length(); i++)
                                 {
-                                    Log.d("myTag", "HXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+                                    //JSONArray jresponse = response.getJSONArray(i);
                                     // set JSON object equal to foodfavJSON
-                                    JSONObject foodfavJSON = jsonArray.getJSONObject(i);
+                                    //JSONObject foodfavJSON = jresponse.getJSONObject("BrandedFoodItem"); // was previously i
 
-                                    String foodName = foodfavJSON.getString("description"); // title of the food basically
+                                    Log.d("myTag", "HXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+                                    JSONObject jresponse = response.getJSONObject(i);
+
+                                    String foodName = jresponse.getString("description"); // title of the food basically "description"
                                     StringTokenizer tokFood = new StringTokenizer(foodName); // tokenizes string to find the keyword, ie food preference
 
                                     // when string is parsed, look for the keyword for user
@@ -99,7 +106,7 @@ public class DietPage extends AppCompatActivity {
                                         if (tokFood.nextToken().toLowerCase().equals(userFood[0].toLowerCase()))
                                         {
                                             Log.d("myTag", "HBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-                                            TotalCalories[0] += foodfavJSON.getInt("calories");
+                                            TotalCalories[0] += jresponse.getInt("calories");
 
                                             // uses single thread executor to retrieve user's calorie preference and sets it to an AtomicInteger
                                             Executor myExecutor = Executors.newSingleThreadExecutor();
@@ -122,17 +129,17 @@ public class DietPage extends AppCompatActivity {
                                                 // if not fulfilled it'll set the name of the food to the Meal's static string and set that meal's calories too
                                                 if (Meals.breakfast == "")
                                                 {
-                                                    Meals.breakfast = foodfavJSON.getString("description");
-                                                    Meals.breakCal = foodfavJSON.getInt("calories");
+                                                    Meals.breakfast = jresponse.getString("description");
+                                                    Meals.breakCal = jresponse.getInt("calories");
                                                     println("WE ARE HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE");
-                                                    println(foodfavJSON.getString("description"));
+                                                    println(jresponse.getString("description"));
                                                     println("WE ARE HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE");
                                                     break;
                                                 }
                                                 else if(Meals.Lunch == "")
                                                 {
-                                                    Meals.Lunch = foodfavJSON.getString("description");
-                                                    Meals.mainCalLunch = foodfavJSON.getInt("calories");
+                                                    Meals.Lunch = jresponse.getString("description");
+                                                    Meals.mainCalLunch = jresponse.getInt("calories");
 
                                                     // does search for veggies for meal, commented out cuz don't know if it can be implemented yet
                                                     /*
@@ -154,8 +161,8 @@ public class DietPage extends AppCompatActivity {
                                                 }
                                                 else if(Meals.Dinner == "")
                                                 {
-                                                    Meals.Dinner = foodfavJSON.getString("description");
-                                                    Meals.mainCalDinner = foodfavJSON.getInt("calories");
+                                                    Meals.Dinner = jresponse.getString("description");
+                                                    Meals.mainCalDinner = jresponse.getInt("calories");
                                                     break;
                                                 }
                                             }
@@ -182,7 +189,7 @@ public class DietPage extends AppCompatActivity {
             );
             //  |
             //  V  this actually does the GET Request
-            ReqQ.add(ObjReq);
+            ReqQ.add(ArReq);
 
         }
         catch (NullPointerException e)
