@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import com.example.readymealapp.ui.main.DataDisplay;
+import com.example.readymealapp.ui.main.DietPage;
 import com.example.readymealapp.ui.main.StatisticsPage;
 
 import java.util.concurrent.Executor;
@@ -46,7 +47,7 @@ public class HomePage extends AppCompatActivity {
 
     //Function that will take you from the homepage to the DailyDiet page from clicking the cardview
     public void goToDailyDiet(View view){
-        Intent DailyDietActivity = new Intent (this, DailyDiet.class);
+        Intent DailyDietActivity = new Intent (this, DietPage.class);
         startActivity(DailyDietActivity);
     }
 

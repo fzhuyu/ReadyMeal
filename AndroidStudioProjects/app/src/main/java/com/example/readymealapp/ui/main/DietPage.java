@@ -55,7 +55,6 @@ public class DietPage extends AppCompatActivity {
             userFood[0] = Local_db.userDao().LoadFoodPref();
         });
                 //User me = new User();
-
         //User me = new User();
         //Local_db.userDao().insertUser(me);
 
@@ -63,6 +62,8 @@ public class DietPage extends AppCompatActivity {
         ////////////////////////////////////////////////////////////////////
         try
         {
+
+
             // Defnition for JSON GET request
             //////// if for some reason the current URL doesn't work, then try this: "https://nal.altarama.com/reft100.aspx?key=FoodData" or "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX"
             RequestQueue ReqQ = Volley.newRequestQueue(this);
@@ -71,7 +72,6 @@ public class DietPage extends AppCompatActivity {
                     "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX",
                     null,
                     new Response.Listener<JSONArray>() {
-
                         @Override
                         public void onResponse(JSONArray response) {
                             try {
@@ -112,6 +112,7 @@ public class DietPage extends AppCompatActivity {
                                             if (UserCalories.floatValue() <= TotalCalories[0] || (Meals.breakfast != "" && Meals.Lunch != "" && Meals.Dinner != ""))
                                             {
                                                 breakfast = Meals.breakfast;
+                                                showText();
                                                 // display to user the info about their meal plan
 
                                             }
