@@ -17,6 +17,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.readymealapp.AppDatabase;
 import com.example.readymealapp.R;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,6 +55,7 @@ public class DietPage extends AppCompatActivity {
         myExecutor.execute(() -> {
             userFood[0] = Local_db.userDao().LoadFoodPref();
         });
+        String url = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=" + userFood[0];
         //User me = new User();
         //User me = new User();
         //Local_db.userDao().insertUser(me);
@@ -68,15 +70,16 @@ public class DietPage extends AppCompatActivity {
             //////// if for some reason the current URL doesn't work, then try these:
             // or "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX"
             // or https://developer.nrel.gov/api/alt-fuel-stations/v1.json?limit=1&api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX
+            // or https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=Cheddar%20Cheese OR https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=Chicken
 
             RequestQueue ReqQ = Volley.newRequestQueue(this);
-            JsonArrayRequest ArReq = new JsonArrayRequest(
+            JsonObjectRequest ArReq = new JsonObjectRequest(
                     Request.Method.GET,
-                    "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX",
+                    url,
                     null,
-                    new Response.Listener<JSONArray>() {
+                    new Response.Listener<JSONObject>() {
                         @Override
-                        public void onResponse(JSONArray response) {
+                        public void onResponse(JSONObject response) {
                             try {
                                 Log.d("myTag", "HWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
                                 // get an array of JSON objects that are Branded Food Items
@@ -85,17 +88,21 @@ public class DietPage extends AppCompatActivity {
 
                                 // JsonObjectRequest Jobj = response.getJSONObject();
 
+                                JSONArray jsonArray = response.getJSONArray("foods");
+
                                 // loop through this jsonArray to look for the user's food
-                                for (int i = 0; i < response.length(); i++)
+                                // was response.length()
+                                for (int i = 0; i < jsonArray.length(); i++)
                                 {
                                     //JSONArray jresponse = response.getJSONArray(i);
                                     // set JSON object equal to foodfavJSON
                                     //JSONObject foodfavJSON = jresponse.getJSONObject("BrandedFoodItem"); // was previously i
 
                                     Log.d("myTag", "HXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-                                    JSONObject jresponse = response.getJSONObject(i);
+                                    //JSONObject jresponse = response.getJSONObject(); // was originally i. Chicken
+                                    JSONObject foodFav = jsonArray.getJSONObject(i);
 
-                                    String foodName = jresponse.getString("description"); // title of the food basically "description"
+                                    String foodName = foodFav.getString("lowercaseDescription"); // title of the food, also might be index 3 if using JsonObjectRequest
                                     StringTokenizer tokFood = new StringTokenizer(foodName); // tokenizes string to find the keyword, ie food preference
 
                                     // when string is parsed, look for the keyword for user
@@ -106,7 +113,10 @@ public class DietPage extends AppCompatActivity {
                                         if (tokFood.nextToken().toLowerCase().equals(userFood[0].toLowerCase()))
                                         {
                                             Log.d("myTag", "HBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-                                            TotalCalories[0] += jresponse.getInt("calories");
+
+                                            JSONArray CalAr = response.getJSONArray("foodNutrients");
+                                            //String temp = CalObj.getString("KCAL");
+                                            //TotalCalories[0] += CalObj.getInt("KCAL"); //Integer.parseInt(temp);
 
                                             // uses single thread executor to retrieve user's calorie preference and sets it to an AtomicInteger
                                             Executor myExecutor = Executors.newSingleThreadExecutor();
@@ -129,17 +139,18 @@ public class DietPage extends AppCompatActivity {
                                                 // if not fulfilled it'll set the name of the food to the Meal's static string and set that meal's calories too
                                                 if (Meals.breakfast == "")
                                                 {
-                                                    Meals.breakfast = jresponse.getString("description");
-                                                    Meals.breakCal = jresponse.getInt("calories");
+                                                    Meals.breakfast = foodFav.getString("lowercaseDescription");
+                                                    //temp = foodFav.getString("KCAL");
+                                                    //Meals.breakCal = CalObj.getInt("KCAL");
                                                     println("WE ARE HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE");
-                                                    println(jresponse.getString("description"));
+                                                    println(foodFav.getString("description"));
                                                     println("WE ARE HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE");
                                                     break;
                                                 }
                                                 else if(Meals.Lunch == "")
                                                 {
-                                                    Meals.Lunch = jresponse.getString("description");
-                                                    Meals.mainCalLunch = jresponse.getInt("calories");
+                                                    Meals.Lunch = foodFav.getString("lowercaseDescription");
+                                                    Meals.mainCalLunch = response.getInt("KCAL");
 
                                                     // does search for veggies for meal, commented out cuz don't know if it can be implemented yet
                                                     /*
@@ -161,8 +172,8 @@ public class DietPage extends AppCompatActivity {
                                                 }
                                                 else if(Meals.Dinner == "")
                                                 {
-                                                    Meals.Dinner = jresponse.getString("description");
-                                                    Meals.mainCalDinner = jresponse.getInt("calories");
+                                                    Meals.Dinner = foodFav.getString("lowercaseDescription");
+                                                    Meals.mainCalDinner = response.getInt("KCAL");
                                                     break;
                                                 }
                                             }
