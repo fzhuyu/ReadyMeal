@@ -1,7 +1,10 @@
 package com.example.readymealapp.ui.main;
 
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
@@ -10,7 +13,7 @@ import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
 import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.charts.Pie;
+import com.anychart.charts.Cartesian;
 import com.example.readymealapp.AppDatabase;
 import com.example.readymealapp.R;
 
@@ -26,13 +29,15 @@ public class StatisticsPage extends AppCompatActivity {
     //String[] daysOfWeek = {"Sun", "Mon", "Tue"};
     //int[] calories = {2200, 2000, 1850};
 
+    private ViewFlipper viewFlipper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.statistics);
 
         final AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
-        //
+        // Instatiating the database to diplay the user's input in the profile section
 
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
@@ -66,27 +71,42 @@ public class StatisticsPage extends AppCompatActivity {
 
         });
 
-        //pieChart = findViewById(R.id.pie_chart);
-
-        //Example data using the AnyChart Pie Chart implementation
-        //We need to link this to the database to base it on the user's info
-
-        Pie pie = AnyChart.pie();
-
-        List<DataEntry> data = new ArrayList<>();
-        data.add(new ValueDataEntry("Mon", 2200));
-        data.add(new ValueDataEntry("Tue", 2000));
-        data.add(new ValueDataEntry("Wed", 1800));
-        data.add(new ValueDataEntry("Thu", 1850));
-
-        pie.data(data);
-
-        AnyChartView anyChartView = (AnyChartView) findViewById(R.id.any_chart_view);
-        anyChartView.setChart(pie);
+        // View Flipper to switch between the card views and the graph view
+        viewFlipper = findViewById(R.id.view_flip);
 
 
+        //Example data using the AnyChart Cartesian Chart implementation
+        Cartesian bar = AnyChart.column();
 
+        List<DataEntry> data1 = new ArrayList<>();
+        data1.add(new ValueDataEntry("Breakfast", 500));
+        data1.add(new ValueDataEntry("Lunch", 850));
+        data1.add(new ValueDataEntry("Dinner", 900));
+
+        bar.data(data1);
+
+        bar.title("Daily Calorie Intake");
+        bar.xAxis(0).title("Meal Type");
+        bar.yAxis(0).title("Calories");
+
+        AnyChartView barChartView = (AnyChartView) findViewById(R.id.bar_chart_view);
+        barChartView.setChart(bar);
+
+        // Removing the Parent otherwise we receive an error
+
+        if (barChartView.getParent() != null)
+        {
+            ((ViewGroup)barChartView.getParent()).removeView(barChartView);
+        }
+        viewFlipper.addView(barChartView);
     }
+
+    //SwitchView function for the viewflipper for the button to switch between views
+    public void switchView(View v)
+    {
+        viewFlipper.showNext();
+    }
+
 
 /* Another method to try the data (using a for loop) - does not currently work
 

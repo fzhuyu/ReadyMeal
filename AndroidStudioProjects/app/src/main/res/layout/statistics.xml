@@ -22,14 +22,163 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <com.anychart.AnyChartView
-        android:id="@+id/any_chart_view"
-        android:layout_width="325dp"
-        android:layout_height="300dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="15dp"
+    <ViewFlipper
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/view_flip">
+<!--
+        <com.anychart.AnyChartView
+            android:id="@+id/any_chart_view"
+            android:layout_width="325dp"
+            android:layout_height="300dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="100dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/stat_text" />
+-->
+
+        <com.anychart.AnyChartView
+            android:id="@+id/bar_chart_view"
+            android:layout_width="325dp"
+            android:layout_height="300dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="100dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/stat_text" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="325dp"
+            android:layout_height="300dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#473F97">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/first_card"
+                    android:layout_width="325dp"
+                    android:layout_height="125dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    app:cardBackgroundColor="#0575E6">
+
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:src="@drawable/bmi_icon"
+                        android:layout_marginLeft="258dp"
+                        android:layout_marginTop="30dp"/>
+
+                    <TextView
+                        android:id="@+id/caloric_goal_test"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/graphikmedium"
+                        android:text="How you rank:"
+                        android:textColor="#ffffff"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/caloric_goal_test2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="30dp"
+                        android:fontFamily="@font/graphikregular"
+                        android:text="You are currently 23 years old,
+                                      with a height of 6 feet 0 inches,
+                                      and a Body Mass Index of 18.0."
+                        android:textColor="#ffffff"
+                        android:textSize="16sp" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/second_card"
+                    android:layout_width="325dp"
+                    android:layout_height="125dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="50dp"
+                    android:paddingTop="0dp"
+                    android:layout_below="@id/first_card"
+                    app:cardBackgroundColor="#0575E6">
+
+                    <ImageView
+                        android:layout_width="54dp"
+                        android:layout_height="54dp"
+                        android:src="@drawable/stretch_icon2"
+                        android:layout_marginLeft="260dp"
+                        android:layout_marginTop="30dp"/>
+
+                    <TextView
+                        android:id="@+id/caloric_goal_test1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/graphikmedium"
+                        android:text="How you compare:"
+                        android:textColor="#ffffff"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/caloric_goal_test3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="30dp"
+                        android:fontFamily="@font/graphikregular"
+                        android:text="For your height, a normal weight
+                                      range would be from 136 to 184
+                                      pounds. You would be in the
+                                      Underweight category."
+                        android:textColor="#ffffff"
+                        android:textSize="16sp" />
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+<!--
+
+        <TextView
+            android:layout_width="325dp"
+            android:layout_height="300dp"
+            android:id="@+id/test_tv"
+            android:text="TEST"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="100dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/stat_text"/>
+-->
+    </ViewFlipper>
+
+    <Button
+        android:id="@+id/test_btn"
+        android:layout_width="137dp"
+        android:layout_height="38dp"
+        android:layout_marginLeft="230dp"
+        android:layout_marginBottom="644dp"
+        android:background="@drawable/stat_btn"
+        android:onClick="switchView"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="Graph"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stat_text" />
+        app:layout_constraintRight_toRightOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="170dp"
