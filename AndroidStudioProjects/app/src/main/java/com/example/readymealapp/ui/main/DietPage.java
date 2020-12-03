@@ -22,6 +22,13 @@ import com.example.readymealapp.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -29,7 +36,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.sql.DriverManager.println;
-
 
 public class DietPage extends AppCompatActivity {
     String userFood;
@@ -43,13 +49,38 @@ public class DietPage extends AppCompatActivity {
 
         final float[] TotalCalories = {0};
 
-        // an atomicinteger UserCalories AndroidStudio created so LoadCalories can set its return val to UserCalories
-        //AtomicInteger UserCalories = new AtomicInteger();
+        Map<String, Integer> breakfastItems = new HashMap<String, Integer>();
+        breakfastItems.put("Waffles", 82);
+        breakfastItems.put("Pancakes", 64);
+        breakfastItems.put("Sausages", 391);
+        breakfastItems.put("Grits", 143);
+        breakfastItems.put("Cereal", 307);
+
+        int i =  1 + (int)(Math.random() * ((5 - 1) + 1));
+
+        Iterator<Map.Entry<String, Integer>> itr = breakfastItems.entrySet().iterator();
+
+        while(itr.hasNext() && i != 0)
+        {
+            Map.Entry<String, Integer> entry = itr.next();
+            Meals.breakfast = entry.getKey();
+            Meals.breakCal = entry.getValue();
+            i--;
+        }
+
+        /*while (i != 0)
+        {
+            breakfastItems.entrySet().iterator().next();
+            Map.Entry<String,Integer> entry = breakfastItems.entrySet().iterator().next();
+            Meals.breakfast = entry.getKey();
+            Meals.breakCal = entry.getValue();
+            i--;
+        }
+        */
+
 
         // retreiving data from Room for food preferences and calories based on name of user
         final AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
-
-
         final String[] userFood = new String[1];
 
         /*Executor myExecutor = Executors.newSingleThreadExecutor();
