@@ -94,8 +94,9 @@ public class DietPage extends AppCompatActivity {
                                 {
 
                                     Log.d("myTag", "HXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-                                    //JSONObject jresponse = response.getJSONObject(); // was originally i. Chicken
-                                    JSONObject foodFav = jsonArray.getJSONObject(i);
+                                    int index = 1 + (int)(Math.random() * ((jsonArray.length() - 1) + 1));
+
+                                    JSONObject foodFav = jsonArray.getJSONObject(index);
 
                                     String foodName = foodFav.getString("lowercaseDescription"); // title of the food, also might be index 3 if using JsonObjectRequest
                                     StringTokenizer tokFood = new StringTokenizer(foodName); // tokenizes string to find the keyword, ie food preference
