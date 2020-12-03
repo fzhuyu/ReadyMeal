@@ -1,10 +1,13 @@
 package com.example.readymealapp.ui.main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.room.Room;
 
 import com.android.volley.Request;
@@ -23,10 +26,14 @@ import java.util.StringTokenizer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static java.sql.DriverManager.println;
 
 
 public class DietPage extends AppCompatActivity {
     String userFood;
+    String breakfast = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,108 +44,115 @@ public class DietPage extends AppCompatActivity {
         final float[] TotalCalories = {0};
 
         // an atomicinteger UserCalories AndroidStudio created so LoadCalories can set its return val to UserCalories
-        AtomicInteger UserCalories = new AtomicInteger();
+        //AtomicInteger UserCalories = new AtomicInteger();
 
         // retreiving data from Room for food preferences and calories based on name of user
         final AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
 
-        // this gets user's food preference by setting the value to an instance of a User class
-        Executor myExecutor = Executors.newSingleThreadExecutor();
+
+        final String[] userFood = new String[1];
+
+        /*Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
-            userFood = Local_db.userDao().LoadFoodPref();
+            userFood[0] = Local_db.userDao().LoadFoodPref();
         });
-                //User me = new User();
+        */
+
+        String APIurl = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=" + Meals.UserFoodPref + "s";
+
+        //User me = new User();
+        //User me = new User();
         //Local_db.userDao().insertUser(me);
 
         /////// code for using a GET request for JSON object from API ///////
         ////////////////////////////////////////////////////////////////////
         try
         {
+
             // Defnition for JSON GET request
-            //////// if for some reason the current URL doesn't work, then try this: "https://nal.altarama.com/reft100.aspx?key=FoodData" or "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX"
+            //////// if for some reason the current URL doesn't work, then try these:
+            // or "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX"
+            // or https://developer.nrel.gov/api/alt-fuel-stations/v1.json?limit=1&api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX
+            // or https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=Cheddar%20Cheese OR https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=Chicken
+
             RequestQueue ReqQ = Volley.newRequestQueue(this);
             JsonObjectRequest ObjReq = new JsonObjectRequest(
                     Request.Method.GET,
-                    "https://developer.nrel.gov/api/alt-fuel-stations/v1.json?limit=1&api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX",
+                    APIurl,
                     null,
                     new Response.Listener<JSONObject>() {
-
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
+                                Log.d("myTag", "HWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+                                // get an array of JSON objects that are Arrays of "foods"
 
-                                // get an array of JSON objects that are Branded Food Items
-                                JSONArray jsonArray = response.getJSONArray("BrandedFoodItem");
+                                JSONArray jsonArray = response.getJSONArray("foods");
 
                                 // loop through this jsonArray to look for the user's food
                                 for (int i = 0; i < jsonArray.length(); i++)
                                 {
-                                    // set JSON object equal to foodfavJSON
-                                    JSONObject foodfavJSON = jsonArray.getJSONObject(i);
-                                    String foodName = foodfavJSON.getString("description"); // title of the food basically
+
+                                    Log.d("myTag", "HXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+                                    int index = 1 + (int)(Math.random() * ((jsonArray.length() - 1) + 1));
+
+                                    JSONObject foodFav = jsonArray.getJSONObject(index);
+
+                                    String foodName = foodFav.getString("lowercaseDescription"); // title of the food, also might be index 3 if using JsonObjectRequest
                                     StringTokenizer tokFood = new StringTokenizer(foodName); // tokenizes string to find the keyword, ie food preference
 
                                     // when string is parsed, look for the keyword for user
                                     while (tokFood.hasMoreTokens())
                                     {
+                                        Log.d("TAAAAAAAAAAAG", "HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                                         // if the tokenized food name found in request equals the user's food preference, then store the calories
-                                        if (tokFood.nextToken().toLowerCase().equals(userFood.toLowerCase()))
+                                        if (tokFood.nextToken().toLowerCase().equals(Meals.UserFoodPref.toLowerCase()))
                                         {
 
-                                            TotalCalories[0] += foodfavJSON.getInt("calories");
+                                            JSONArray TempJsonObj = foodFav.getJSONArray("foodNutrients");
+                                            JSONObject JSONCal = (JSONObject) TempJsonObj.get(3);
+                                            TotalCalories[0] += JSONCal.getInt("value");
 
-                                            // uses single thread executor to retrieve user's calorie preference and sets it to an AtomicInteger
-                                            Executor myExecutor = Executors.newSingleThreadExecutor();
-                                            myExecutor.execute(() -> {
-
-                                                UserCalories.set(Local_db.userDao().LoadCurrentCalories());
-                                            });
+                                            Log.d("myTag", "HBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
                                             // if we have reached the max calories OR all the main meals have been added to class "Meals" then we'll display everything in the Meals class
-                                            if (UserCalories.floatValue() <= TotalCalories[0] || (Meals.breakfast != "" && Meals.Lunch != "" && Meals.Dinner != ""))
+                                            if (Meals.UserCalories <= TotalCalories[0] || (Meals.breakfast != null && Meals.Lunch != null && Meals.Dinner != null))
                                             {
+                                                Log.d("myTag", "Gonna print breakfast name now!");
+                                                breakfast = Meals.breakfast;
+                                                showText();
                                                 // display to user the info about their meal plan
+
                                             }
                                             else
                                             {
+                                                Log.d("myTag", "Got into the else to set breakfast name!");
                                                 // looks to see if breakfast, lunch, and dinner have been fulfilled yet
                                                 // if not fulfilled it'll set the name of the food to the Meal's static string and set that meal's calories too
-                                                if (Meals.breakfast == "")
+                                                if (Meals.breakfast == null)
                                                 {
-                                                    Meals.breakfast = foodfavJSON.getString("description");
-                                                    Meals.breakCal = foodfavJSON.getInt("calories");;
+                                                    Meals.breakfast = foodFav.getString("lowercaseDescription");
+                                                    //temp = foodFav.getString("KCAL");
+                                                    Meals.breakCal = JSONCal.getInt("value");
+                                                    //println("WE ARE HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE");
+                                                    //println(foodFav.getString("lowercaseDescription"));
+                                                    //println("WE ARE HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE");
                                                     break;
                                                 }
-                                                else if(Meals.Lunch == "")
+                                                else if(Meals.Lunch == null)
                                                 {
-                                                    Meals.Lunch = foodfavJSON.getString("description");
-                                                    Meals.mainCalLunch = foodfavJSON.getInt("calories");
-
-                                                    // does search for veggies for meal, commented out cuz don't know if it can be implemented yet
-                                                    /*
-                                                    for (int j = 0; j < jsonArray.length(); j++)
-                                                    {
-                                                        JSONObject veggieJSON = jsonArray.getJSONObject(i);
-                                                        String vegStr = veggieJSON.getString("description"); // title of the food
-
-                                                        if (vegStr == "Broccoli" || vegStr == "Green Beans")
-                                                        {
-                                                            TotalCalories[0] += veggieJSON.getInt("calories");
-                                                            Meals.VeggiesLunch = vegStr;
-                                                            Meals.vegCalLunch = veggieJSON.getInt("calories");
-                                                            break;
-                                                        }
-                                                    }
-                                                    */
+                                                    Meals.Lunch = foodFav.getString("lowercaseDescription");
+                                                    Meals.mainCalLunch = JSONCal.getInt("value");
                                                     break;
                                                 }
-                                                else if(Meals.Dinner == "")
+                                                else if(Meals.Dinner == null)
                                                 {
-                                                    Meals.Dinner = foodfavJSON.getString("description");
-                                                    Meals.mainCalDinner = foodfavJSON.getInt("calories");
+                                                    Meals.Dinner = foodFav.getString("lowercaseDescription");
+                                                    Meals.mainCalDinner = JSONCal.getInt("value");
                                                     break;
                                                 }
                                             }
+                                            // end of if token matches user's food preference
 
                                         }
                                         // else, don't set the calories
@@ -156,7 +170,7 @@ public class DietPage extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            error.printStackTrace();
                         }
                     }
             );
@@ -170,7 +184,33 @@ public class DietPage extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
+        showText();
     }
 
+    private void showText()
+    {
+        TextView userMealTextView1;
+        userMealTextView1 = findViewById(R.id.userMealTextView);
+        userMealTextView1.setText("Hello, your breakfast is: \t" + breakfast);
+    }
+
+    /*@Override
+    public LiveData<String> LoadFoodPref()
+    {
+        final LiveData<String> sections = mDb.sectionDAO().getAllSections();
+
+        mSectionLive.addSource(sections, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable List<Section> sectionList) {
+                if(sectionList == null || sectionList.isEmpty()) {
+                    // Fetch data from API
+                }else{
+                    mSectionLive.removeSource(sections);
+                    mSectionLive.setValue(sectionList);
+                }
+            }
+        });
+        return mSectionLive;
+    }
+    */
 }

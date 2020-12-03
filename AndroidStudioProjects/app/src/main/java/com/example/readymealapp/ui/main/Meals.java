@@ -24,6 +24,11 @@ public class Meals
     public static float vegCalDinner;
     public static float carbCalDinner;
 
+    // vars to hold for GET request
+    public static String UserFoodPref;
+    public static float UserCalories;
+
+
     // constructor
     public Meals()
     {
