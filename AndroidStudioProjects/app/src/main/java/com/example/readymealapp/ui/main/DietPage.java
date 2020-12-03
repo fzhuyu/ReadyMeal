@@ -34,6 +34,9 @@ import static java.sql.DriverManager.println;
 public class DietPage extends AppCompatActivity {
     String userFood;
     String breakfast = "";
+    String lunch = "";
+    String dinner = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -84,7 +87,6 @@ public class DietPage extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
-                                Log.d("myTag", "HWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
                                 // get an array of JSON objects that are Arrays of "foods"
 
                                 JSONArray jsonArray = response.getJSONArray("foods");
@@ -93,7 +95,6 @@ public class DietPage extends AppCompatActivity {
                                 for (int i = 0; i < jsonArray.length(); i++)
                                 {
 
-                                    Log.d("myTag", "HXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
                                     int index = 1 + (int)(Math.random() * ((jsonArray.length() - 1) + 1));
 
                                     JSONObject foodFav = jsonArray.getJSONObject(index);
@@ -104,7 +105,6 @@ public class DietPage extends AppCompatActivity {
                                     // when string is parsed, look for the keyword for user
                                     while (tokFood.hasMoreTokens())
                                     {
-                                        Log.d("TAAAAAAAAAAAG", "HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                                         // if the tokenized food name found in request equals the user's food preference, then store the calories
                                         if (tokFood.nextToken().toLowerCase().equals(Meals.UserFoodPref.toLowerCase()))
                                         {
@@ -113,20 +113,22 @@ public class DietPage extends AppCompatActivity {
                                             JSONObject JSONCal = (JSONObject) TempJsonObj.get(3);
                                             TotalCalories[0] += JSONCal.getInt("value");
 
-                                            Log.d("myTag", "HBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-
                                             // if we have reached the max calories OR all the main meals have been added to class "Meals" then we'll display everything in the Meals class
                                             if (Meals.UserCalories <= TotalCalories[0] || (Meals.breakfast != null && Meals.Lunch != null && Meals.Dinner != null))
                                             {
-                                                Log.d("myTag", "Gonna print breakfast name now!");
+                                                //Log.d("myTag", "Gonna print breakfast name now!");
                                                 breakfast = Meals.breakfast;
-                                                showText();
+                                                lunch = Meals.Lunch;
+                                                dinner = Meals.Dinner;
+                                                showBreakfast();
+                                                showLunch();
+                                                showDinner();
                                                 // display to user the info about their meal plan
 
                                             }
                                             else
                                             {
-                                                Log.d("myTag", "Got into the else to set breakfast name!");
+                                                //Log.d("myTag", "Got into the else to set breakfast name!");
                                                 // looks to see if breakfast, lunch, and dinner have been fulfilled yet
                                                 // if not fulfilled it'll set the name of the food to the Meal's static string and set that meal's calories too
                                                 if (Meals.breakfast == null)
@@ -134,9 +136,6 @@ public class DietPage extends AppCompatActivity {
                                                     Meals.breakfast = foodFav.getString("lowercaseDescription");
                                                     //temp = foodFav.getString("KCAL");
                                                     Meals.breakCal = JSONCal.getInt("value");
-                                                    //println("WE ARE HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE");
-                                                    //println(foodFav.getString("lowercaseDescription"));
-                                                    //println("WE ARE HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERE");
                                                     break;
                                                 }
                                                 else if(Meals.Lunch == null)
@@ -183,15 +182,30 @@ public class DietPage extends AppCompatActivity {
         {
             e.printStackTrace();
         }
-
-        showText();
     }
 
-    private void showText()
+    private void showBreakfast()
     {
         TextView userMealTextView1;
-        userMealTextView1 = findViewById(R.id.userMealTextView);
-        userMealTextView1.setText("Hello, your breakfast is: \t" + breakfast);
+        userMealTextView1 = findViewById(R.id.userMealBreakfast);
+        String breakfastString = breakfast.substring(0, 1).toUpperCase() + breakfast.substring(1) + "\n" + Meals.breakCal + "cal";
+        userMealTextView1.setText(breakfastString);
+    }
+
+    private void showLunch()
+    {
+        TextView userMealTextView1;
+        userMealTextView1 = findViewById(R.id.userMealLunch);
+        String lunchString = lunch.substring(0, 1).toUpperCase() + lunch.substring(1) + "\n" + Meals.mainCalLunch + "cal";
+        userMealTextView1.setText(lunchString);
+    }
+
+    private void showDinner()
+    {
+        TextView userMealTextView1;
+        userMealTextView1 = findViewById(R.id.userMealDinner);
+        String dinnerString = dinner.substring(0, 1).toUpperCase() + dinner.substring(1) + "\n" + Meals.mainCalDinner + "cal";
+        userMealTextView1.setText(dinnerString);
     }
 
     /*@Override
