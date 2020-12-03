@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.readymealapp.ui.main.Meals;
+
 import java.lang.Object;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -182,6 +184,7 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
             //------Favorite Food------
             //add the user's favorite food into the database
             me.FoodFav = favFood;
+            Meals.UserFoodPref = favFood;
 
             //--------Sex--------
             //add the user's favorite food into the database
@@ -190,6 +193,8 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
             //--------Caloric Goal--------
             //add the caloric goal into the database
             me.DesiredCalories = Integer.parseInt(caloricGoal);
+            Meals.UserCalories = Integer.parseInt(caloricGoal);
+            //Meals.UserCalories = Integer.parseInt(caloricGoal);
             //initialize current calories to 0
             me.CurrentCalories = 0;
 
