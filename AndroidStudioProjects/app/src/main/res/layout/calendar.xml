@@ -25,7 +25,6 @@
         style="@android:style/Widget.DeviceDefault.Light.CalendarView"
         android:layout_width="match_parent"
         android:layout_height="368dp"
-        android:textColor="@android:color/background_dark"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_centerHorizontal="true"
@@ -36,6 +35,9 @@
         android:gravity="center"
         android:maxDate="12/31/2020"
         android:minDate="12/01/2020"
+        android:selectedWeekBackgroundColor="#151515"
+        android:textColor="@color/black"
+        android:unfocusedMonthDateColor="#F3EDED"
         android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Display1"
         android:weekSeparatorLineColor="@color/black"></CalendarView>
 

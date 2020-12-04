@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -15,11 +16,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+
 public class calendar_activity extends AppCompatActivity {
 
     CalendarView calender;
     TextView date_view;
     Button bt;
+    Button bt2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +39,13 @@ public class calendar_activity extends AppCompatActivity {
             }});
 
 
+        bt2 = (Button) findViewById(R.id.button);
+
+        bt2.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                startActivity(new Intent(calendar_activity.this, HomePage.class));
+            }
+        });
         calender = (CalendarView)
                 findViewById(R.id.calender);
         date_view = (TextView)
