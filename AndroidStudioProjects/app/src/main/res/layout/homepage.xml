@@ -15,9 +15,9 @@
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="65dp"
-            android:layout_marginBottom="15dp"
             android:layout_marginLeft="130dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="15dp"
             android:fontFamily="@font/montserrat"
             android:text="Home"
             android:textColor="#fff"
@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="80dp"
             android:textColor="#fff"
             android:gravity="center"
             android:singleLine="false"
@@ -50,33 +50,33 @@
 
         <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="408dp"
+            android:alignmentMode="alignMargins"
+            android:columnCount="2"
+            android:layout_marginTop="30dp"
             android:columnOrderPreserved="false"
-            android:columnCount="4"
             android:rowCount="2">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/diet_card"
-                android:layout_width="0dp"
-                android:layout_height="150dp"
-                android:layout_row="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_rowWeight="1"
-                android:layout_column="0"
                 android:layout_columnWeight="1"
-                android:layout_margin="50dp"
+                android:layout_margin="12dp"
                 android:onClick="goToDailyDiet"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="6dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="16dp">
 
                     <ImageView
-                        android:layout_width="100dp"
+                        android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:src="@drawable/diet">
 
@@ -94,24 +94,25 @@
 
                 </LinearLayout>
 
+
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
                 android:layout_margin="12dp"
-                app:cardCornerRadius="12dp"
                 android:onClick="goToCalendar"
-                app:cardElevation="1dp">
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:gravity="center"
-                    android:padding="15dp">
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <ImageView
                         android:layout_width="80dp"
@@ -123,10 +124,49 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
                         android:text="Calendar"
-                        android:textSize="20sp"
                         android:textColor="#000"
-                        android:paddingTop="5dp">
+                        android:textSize="20sp">
+
+                    </TextView>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="12dp"
+                android:onClick="goToStatistics"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@drawable/stats">
+
+                    </ImageView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:text="Statistics"
+                        android:textColor="#000"
+                        android:textSize="20sp">
 
                     </TextView>
 
@@ -135,38 +175,37 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
+                android:id="@+id/stat_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="goToStatistics"
-                android:id="@+id/stat_card"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
                 android:layout_margin="12dp"
+                android:onClick="goToUserInputData"
                 app:cardCornerRadius="12dp"
-                android:layout_marginLeft="125dp"
                 app:cardElevation="6dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:gravity="center"
+                    android:orientation="vertical"
                     android:padding="16dp">
 
                     <ImageView
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:src="@drawable/stats2">
+                        app:srcCompat="@android:drawable/ic_menu_revert">
 
                     </ImageView>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Statistics"
-                        android:textSize="20sp"
+                        android:paddingTop="5dp"
+                        android:text="Restart"
                         android:textColor="#000"
-                        android:paddingTop="5dp">
+                        android:textSize="20sp">
 
                     </TextView>
 
@@ -178,34 +217,6 @@
 
 
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="146dp"
-        android:layout_height="69dp"
-        android:layout_marginBottom="36dp"
-        android:onClick="goToUserInputData"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_revert"/>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="104dp"
-        android:text="Restart"
-        android:fontFamily="@font/montserrat"
-        android:textColor="#fff"
-        android:textSize="22dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"/>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
