@@ -26,5 +26,5 @@ public interface CalorieDao {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertCal(CalRoom cal);
+    void insert(CalRoom cal);
 }

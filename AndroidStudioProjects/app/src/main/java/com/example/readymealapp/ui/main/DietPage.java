@@ -42,6 +42,7 @@ public class DietPage extends AppCompatActivity {
     String breakfast = "";
     String lunch = "";
     String dinner = "";
+    final float[] TotalCalories = {0};
 
 
     @Override
@@ -50,10 +51,8 @@ public class DietPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.diet);
 
-        final float[] TotalCalories = {0};
-
         GETRequest(TotalCalories);
-        //GETRequestCarbs(TotalCalories);
+        GETRequestCarbs(TotalCalories);
         //GETRequestVegs(TotalCalories);
     }
 
@@ -104,26 +103,6 @@ public class DietPage extends AppCompatActivity {
             i--;
         }
 
-        /*while (i != 0)
-        {
-            breakfastItems.entrySet().iterator().next();
-            Map.Entry<String,Integer> entry = breakfastItems.entrySet().iterator().next();
-            Meals.breakfast = entry.getKey();
-            Meals.breakCal = entry.getValue();
-            i--;
-        }
-        */
-
-
-        // retreiving data from Room for food preferences and calories based on name of user
-        //final AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
-        //final String[] userFood = new String[1];
-
-        /*Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> {
-            userFood[0] = Local_db.userDao().LoadFoodPref();
-        });
-        */
 
         String APIurl = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=" + Meals.UserFoodPref + "s";
 
@@ -133,122 +112,109 @@ public class DietPage extends AppCompatActivity {
 
         /////// code for using a GET request for JSON object from API ///////
         ////////////////////////////////////////////////////////////////////
-        try
-        {
 
-            // Defnition for JSON GET request
-            //////// if for some reason the current URL doesn't work, then try these:
-            // or "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX"
-            // or https://developer.nrel.gov/api/alt-fuel-stations/v1.json?limit=1&api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX
-            // or https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=Cheddar%20Cheese OR https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=Chicken
 
-            RequestQueue ReqQ = Volley.newRequestQueue(this);
-            JsonObjectRequest ObjReq = new JsonObjectRequest(
-                    Request.Method.GET,
-                    APIurl,
-                    null,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                // get an array of JSON objects that are Arrays of "foods"
 
-                                JSONArray jsonArray = response.getJSONArray("foods");
+        //RequestQueue ReqQ = Volley.newRequestQueue(this);
+        JsonObjectRequest ObjReq = new JsonObjectRequest(
+                Request.Method.GET,
+                APIurl,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // get an array of JSON objects that are Arrays of "foods"
 
-                                // loop through this jsonArray to look for the user's food
-                                for (int i = 0; i < jsonArray.length(); i++)
+                            JSONArray jsonArray = response.getJSONArray("foods");
+
+                            // loop through this jsonArray to look for the user's food
+                            for (int i = 0; i < jsonArray.length(); i++)
+                            {
+
+                                int index = (int)(Math.random() * ((jsonArray.length() - 1) + 1));
+
+                                JSONObject foodFav = jsonArray.getJSONObject(index);
+
+                                String foodName = foodFav.getString("lowercaseDescription"); // title of the food, also might be index 3 if using JsonObjectRequest
+                                StringTokenizer tokFood = new StringTokenizer(foodName); // tokenizes string to find the keyword, ie food preference
+
+                                // when string is parsed, look for the keyword for user
+                                while (tokFood.hasMoreTokens())
                                 {
-
-                                    int index = 1 + (int)(Math.random() * ((jsonArray.length() - 1) + 1));
-
-                                    JSONObject foodFav = jsonArray.getJSONObject(index);
-
-                                    String foodName = foodFav.getString("lowercaseDescription"); // title of the food, also might be index 3 if using JsonObjectRequest
-                                    StringTokenizer tokFood = new StringTokenizer(foodName); // tokenizes string to find the keyword, ie food preference
-
-                                    // when string is parsed, look for the keyword for user
-                                    while (tokFood.hasMoreTokens())
+                                    // if the tokenized food name found in request equals the user's food preference, then store the calories
+                                    if (tokFood.nextToken().toLowerCase().equals(Meals.UserFoodPref.toLowerCase()))
                                     {
-                                        // if the tokenized food name found in request equals the user's food preference, then store the calories
-                                        if (tokFood.nextToken().toLowerCase().equals(Meals.UserFoodPref.toLowerCase()))
+
+                                        JSONArray TempJsonObj = foodFav.getJSONArray("foodNutrients");
+                                        JSONObject JSONCal = (JSONObject) TempJsonObj.get(3);
+                                        TotalCalories[0] += JSONCal.getInt("value");
+
+                                        // if we have reached the max calories OR all the main meals have been added to class "Meals" then we'll display everything in the Meals class
+                                        if (TotalCalories[0] >= Meals.UserCalories)
                                         {
+                                            //Log.d("myTag", "Gonna print breakfast name now!");
+                                            breakfast = Meals.breakfast;
+                                            lunch = Meals.Lunch;
+                                            dinner = Meals.Dinner;
+                                            showBreakfast();
+                                            showLunch();
+                                            showDinner();
+                                            return;
+                                            // display to user the info about their meal plan
 
-                                            JSONArray TempJsonObj = foodFav.getJSONArray("foodNutrients");
-                                            JSONObject JSONCal = (JSONObject) TempJsonObj.get(3);
-                                            TotalCalories[0] += JSONCal.getInt("value");
-
-                                            // if we have reached the max calories OR all the main meals have been added to class "Meals" then we'll display everything in the Meals class
-                                            if (Meals.UserCalories <= TotalCalories[0] || (Meals.breakfast != null && Meals.Lunch != null && Meals.Dinner != null))
+                                        }
+                                        else
+                                        {
+                                            if(Meals.Lunch == null)
                                             {
-                                                //Log.d("myTag", "Gonna print breakfast name now!");
+                                                Meals.Lunch = foodFav.getString("lowercaseDescription");
+                                                Meals.mainCalLunch = JSONCal.getInt("value");
+                                                break;
+                                            }
+                                            else if(Meals.Dinner == null)
+                                            {
+                                                Meals.Dinner = foodFav.getString("lowercaseDescription");
+                                                Meals.mainCalDinner = JSONCal.getInt("value");
                                                 breakfast = Meals.breakfast;
                                                 lunch = Meals.Lunch;
                                                 dinner = Meals.Dinner;
                                                 showBreakfast();
                                                 showLunch();
                                                 showDinner();
-                                                // display to user the info about their meal plan
-
+                                                return;
                                             }
-                                            else
-                                            {
-                                                //Log.d("myTag", "Got into the else to set breakfast name!");
-                                                // looks to see if breakfast, lunch, and dinner have been fulfilled yet
-                                                // if not fulfilled it'll set the name of the food to the Meal's static string and set that meal's calories too
-                                                if (Meals.breakfast == null)
-                                                {
-                                                    Meals.breakfast = foodFav.getString("lowercaseDescription");
-                                                    //temp = foodFav.getString("KCAL");
-                                                    Meals.breakCal = JSONCal.getInt("value");
-                                                    break;
-                                                }
-                                                else if(Meals.Lunch == null)
-                                                {
-                                                    Meals.Lunch = foodFav.getString("lowercaseDescription");
-                                                    Meals.mainCalLunch = JSONCal.getInt("value");
-                                                    break;
-                                                }
-                                                else if(Meals.Dinner == null)
-                                                {
-                                                    Meals.Dinner = foodFav.getString("lowercaseDescription");
-                                                    Meals.mainCalDinner = JSONCal.getInt("value");
-                                                    break;
-                                                }
-                                            }
-                                            // end of if token matches user's food preference
-
                                         }
-                                        // else, don't set the calories
+                                        // end of if token matches user's food preference
+
                                     }
-                                    // end of while loop token
+                                    // else, don't set the calories
                                 }
-                                // end of JSON for loop
+                                // end of while loop token
                             }
-                            // end of try in case JSON Request is invalid or something
-                            catch(JSONException e) {
-                                e.printStackTrace();
-                            }
+                            // end of JSON for loop
                         }
-                    }, // end of API listener description
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
+                        // end of try in case JSON Request is invalid or something
+                        catch(JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-            );
-            //  |
-            //  V  this actually does the GET Request
-            ReqQ.add(ObjReq);
+                }, // end of API listener description
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }
+        );
 
-        }
-        catch (NullPointerException e)
-        {
-            e.printStackTrace();
-        }
+        //  |
+        //  V  this actually does the GET Request
+        Volley.newRequestQueue(getApplicationContext()).add(ObjReq);
+        //ReqQ.add(ObjReq);
     }
 
-    private void GETRequestCarbs(final float[] TotalCalories)
+    public void GETRequestCarbs(final float[] TotalCalories)
     {
 
         ArrayList<String> Carbs = new ArrayList<>();
@@ -258,116 +224,104 @@ public class DietPage extends AppCompatActivity {
 
         int i =  1 + (int)(Math.random() * ((2 - 1) + 1));
 
-        String APIurl = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=" + Carbs.get(i);
+        String APIurlC = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=" + Carbs.get(i);
         final String UserCarbs = Carbs.get(i);
 
-        //User me = new User();
-        //User me = new User();
-        //Local_db.userDao().insertUser(me);
+        JsonObjectRequest ObjReqCarb = new JsonObjectRequest(
+                Request.Method.GET,
+                APIurlC,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // get an array of JSON objects that are Arrays of "foods"
 
-        /////// code for using a GET request for JSON object from API ///////
-        ////////////////////////////////////////////////////////////////////
-        try
-        {
+                            JSONArray jsonArray = response.getJSONArray("foods");
 
-            // Defnition for JSON GET request
-            //////// if for some reason the current URL doesn't work, then try these:
-            // or "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX"
-            // or https://developer.nrel.gov/api/alt-fuel-stations/v1.json?limit=1&api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX
-            // or https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=Cheddar%20Cheese OR https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=Chicken
+                            // loop through this jsonArray to look for the user's food
+                            for (int i = 0; i < jsonArray.length(); i++)
+                            {
 
-            RequestQueue ReqQ = Volley.newRequestQueue(this);
-            JsonObjectRequest ObjReq = new JsonObjectRequest(
-                    Request.Method.GET,
-                    APIurl,
-                    null,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                // get an array of JSON objects that are Arrays of "foods"
+                                int index = (int)(Math.random() * ((jsonArray.length() - 1) + 1));
 
-                                JSONArray jsonArray = response.getJSONArray("foods");
+                                JSONObject foodFav = jsonArray.getJSONObject(index);
 
-                                // loop through this jsonArray to look for the user's food
-                                for (int i = 0; i < jsonArray.length(); i++)
+                                String foodName = foodFav.getString("lowercaseDescription"); // title of the food, also might be index 3 if using JsonObjectRequest
+                                StringTokenizer tokFood = new StringTokenizer(foodName); // tokenizes string to find the keyword, ie food preference
+
+                                // when string is parsed, look for the keyword for user
+                                while (tokFood.hasMoreTokens())
                                 {
-
-                                    int index = 1 + (int)(Math.random() * ((jsonArray.length() - 1) + 1));
-
-                                    JSONObject foodFav = jsonArray.getJSONObject(index);
-
-                                    String foodName = foodFav.getString("lowercaseDescription"); // title of the food, also might be index 3 if using JsonObjectRequest
-                                    StringTokenizer tokFood = new StringTokenizer(foodName); // tokenizes string to find the keyword, ie food preference
-
-                                    // when string is parsed, look for the keyword for user
-                                    while (tokFood.hasMoreTokens())
+                                    // if the tokenized food name found in request equals the user's food preference, then store the calories
+                                    if (tokFood.nextToken().toLowerCase().equals(UserCarbs.toLowerCase()))
                                     {
-                                        // if the tokenized food name found in request equals the user's food preference, then store the calories
-                                        if (tokFood.nextToken().toLowerCase().equals(UserCarbs.toLowerCase()))
+
+                                        JSONArray TempJsonObj = foodFav.getJSONArray("foodNutrients");
+                                        JSONObject JSONCal = (JSONObject) TempJsonObj.get(3);
+                                        TotalCalories[0] += JSONCal.getInt("value");
+                                        Log.d("myTag", "Gonna be at Carbs Starting NOW!!!");
+
+                                        //Log.d("myTag", "Got into the else to set breakfast name!");
+                                        // looks to see if breakfast, lunch, and dinner have been fulfilled yet
+                                        // if not fulfilled it'll set the name of the food to the Meal's static string and set that meal's calories too
+                                        if (Meals.CarbsLunch == null)
+                                        {
+                                            Log.d("myTag", "HEY IS THIS NULL? LMAO!!");
+                                            Meals.CarbsLunch = foodFav.getString("description");
+                                            //temp = foodFav.getString("KCAL");
+                                            Meals.carbCalLunch = JSONCal.getInt("value");
+                                            TotalCalories[0] += Meals.carbCalLunch;
+                                            break;
+                                        }
+                                        else if(Meals.CarbsDinner == null)
+                                        {
+                                            Meals.CarbsDinner = foodFav.getString("description");
+                                            Meals.carbCalDinner = JSONCal.getInt("value");
+                                            TotalCalories[0] += Meals.carbCalDinner;
+                                            //break;
+                                            return;
+                                        }
+                                        /*
+
+                                        // if we have reached the max calories OR all the main meals have been added to class "Meals" then we'll display everything in the Meals class
+                                        if (Meals.UserCalories <= TotalCalories[0] || (Meals.CarbsLunch != null && Meals.CarbsDinner != null))
+                                        {
+                                            return;
+                                            // display to user the info about their meal plan
+                                        }
+                                        else
                                         {
 
-                                            JSONArray TempJsonObj = foodFav.getJSONArray("foodNutrients");
-                                            JSONObject JSONCal = (JSONObject) TempJsonObj.get(3);
-                                            TotalCalories[0] += JSONCal.getInt("value");
-
-                                            // if we have reached the max calories OR all the main meals have been added to class "Meals" then we'll display everything in the Meals class
-                                            if (Meals.UserCalories <= TotalCalories[0] || (Meals.CarbsLunch != null && Meals.CarbsLunch != null))
-                                            {
-                                                Log.d("myTag", "Gonna print Carbs!");
-                                                // display to user the info about their meal plan
-
-                                            }
-                                            else
-                                            {
-                                                //Log.d("myTag", "Got into the else to set breakfast name!");
-                                                // looks to see if breakfast, lunch, and dinner have been fulfilled yet
-                                                // if not fulfilled it'll set the name of the food to the Meal's static string and set that meal's calories too
-                                                if (Meals.CarbsLunch == null)
-                                                {
-                                                    Meals.CarbsLunch = foodFav.getString("lowercaseDescription");
-                                                    //temp = foodFav.getString("KCAL");
-                                                    Meals.carbCalLunch = JSONCal.getInt("value");
-                                                    break;
-                                                }
-                                                else if(Meals.CarbsDinner == null)
-                                                {
-                                                    Meals.CarbsDinner = foodFav.getString("lowercaseDescription");
-                                                    Meals.carbCalDinner = JSONCal.getInt("value");
-                                                    break;
-                                                }
-                                            }
-                                            // end of if token matches user's food preference
-
                                         }
-                                        // else, don't set the calories
+                                        // end of if token matches user's food preference
+
+                                         */
+
                                     }
-                                    // end of while loop token
+                                    // else, don't set the calories
                                 }
-                                // end of JSON for loop
+                                // end of while loop token
                             }
-                            // end of try in case JSON Request is invalid or something
-                            catch(JSONException e) {
-                                e.printStackTrace();
-                            }
+                            // end of JSON for loop
                         }
-                    }, // end of API listener description
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
+                        // end of try in case JSON Request is invalid or something
+                        catch(JSONException e) {
+                            e.printStackTrace();
                         }
                     }
-            );
-            //  |
-            //  V  this actually does the GET Request
-            ReqQ.add(ObjReq);
+                }, // end of API listener description
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }
+        );
+        //ReqQ.add(ObjReqCarb);
+        Volley.newRequestQueue(getApplicationContext()).add(ObjReqCarb);
 
-        }
-        catch (NullPointerException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     private void GETRequestVegs(final float[] TotalCalories)
@@ -385,7 +339,7 @@ public class DietPage extends AppCompatActivity {
         if (Veggies.get(i).equals("peas") || Veggies.get(i).equals("beans"))
             min = 15;
 
-        String APIurl = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=" + Veggies.get(i);
+        String APIurlV = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=" + Veggies.get(i);
         final String UserVeg = Veggies.get(i);
         //User me = new User();
         //User me = new User();
@@ -395,18 +349,10 @@ public class DietPage extends AppCompatActivity {
         ////////////////////////////////////////////////////////////////////
         try
         {
-
-            // Defnition for JSON GET request
-            //////// if for some reason the current URL doesn't work, then try these:
-            // or "https://api.nal.usda.gov/fdc/v1/foods/list?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX"
-            // or https://developer.nrel.gov/api/alt-fuel-stations/v1.json?limit=1&api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX
-            // or https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=Cheddar%20Cheese OR https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=Chicken
-
-            RequestQueue ReqQ = Volley.newRequestQueue(this);
             int finalMin = min;
-            JsonObjectRequest ObjReq = new JsonObjectRequest(
+            JsonObjectRequest ObjReqVeg = new JsonObjectRequest(
                     Request.Method.GET,
-                    APIurl,
+                    APIurlV,
                     null,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -431,7 +377,7 @@ public class DietPage extends AppCompatActivity {
                                     while (tokFood.hasMoreTokens())
                                     {
                                         // if the tokenized food name found in request equals the user's food preference, then store the calories
-                                        if (tokFood.nextToken().toLowerCase().equals(Meals.UserFoodPref.toLowerCase()))
+                                        if (tokFood.nextToken().toLowerCase().equals(UserVeg.toLowerCase()))
                                         {
 
                                             JSONArray TempJsonObj = foodFav.getJSONArray("foodNutrients");
@@ -442,6 +388,7 @@ public class DietPage extends AppCompatActivity {
                                             if (Meals.UserCalories <= TotalCalories[0] || (Meals.VeggiesLunch != null && Meals.VeggiesDinner != null))
                                             {
                                                 Log.d("myTag", "Gonna print Veggies!");
+                                                return;
                                                 // display to user the info about their meal plan
 
                                             }
@@ -486,9 +433,6 @@ public class DietPage extends AppCompatActivity {
                         }
                     }
             );
-            //  |
-            //  V  this actually does the GET Request
-            ReqQ.add(ObjReq);
 
 
         }
