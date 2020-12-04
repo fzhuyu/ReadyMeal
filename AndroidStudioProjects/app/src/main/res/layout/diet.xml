@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="16dp"
         android:text="HOME"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#FFFFFF"
@@ -41,8 +41,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/BreakFastCardView"
-        android:layout_width="398dp"
-        android:layout_height="122dp"
+        android:layout_width="407dp"
+        android:layout_height="169dp"
         app:cardBackgroundColor="#CDDC39"
         app:layout_constraintBottom_toTopOf="@+id/LunchCardView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,37 +57,38 @@
 
             <TextView
                 android:id="@+id/userMealBreakfast"
-                android:layout_width="180dp"
-                android:layout_height="43dp"
-                android:layout_marginBottom="28dp"
+                android:layout_width="205dp"
+                android:layout_height="84dp"
                 android:capitalize="words"
                 android:gravity="left|center_vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.619"
-                app:layout_constraintStart_toEndOf="@+id/imageView4" />
+                app:layout_constraintHorizontal_bias="0.441"
+                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="96dp"
                 android:text="Breakfast"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                app:layout_constraintBottom_toTopOf="@+id/userMealBreakfast"
+                app:layout_constraintBottom_toTopOf="@+id/imageView4"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.028"
-                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintHorizontal_bias="0.124"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.363" />
+                app:layout_constraintVertical_bias="0.3" />
 
             <ImageView
                 android:id="@+id/imageView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.935"
                 app:srcCompat="@drawable/breakfasticon" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -96,13 +97,12 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/LunchCardView"
-        android:layout_width="398dp"
-        android:layout_height="122dp"
-        android:layout_marginBottom="40dp"
+        android:layout_width="407dp"
+        android:layout_height="169dp"
+        android:layout_marginBottom="12dp"
         app:cardBackgroundColor="#FF9800"
         app:layout_constraintBottom_toTopOf="@+id/DinnerCardView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -113,30 +113,49 @@
                 android:id="@+id/textView17"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="104dp"
                 android:text="Lunch"
-                app:layout_constraintBottom_toTopOf="@+id/userMealLunch"
-                app:layout_constraintStart_toEndOf="@+id/imageView5"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.285" />
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/imageView5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.157"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/userMealLunch"
-                android:layout_width="176dp"
-                android:layout_height="47dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginBottom="16dp"
+                android:layout_width="247dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="left|center_vertical"
+                app:layout_constraintBottom_toTopOf="@+id/userCarbsLunch"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView5"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.846" />
+
+            <TextView
+                android:id="@+id/userCarbsLunch"
+                android:layout_width="247dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginBottom="5dp"
                 android:gravity="left|center_vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView5" />
 
             <ImageView
                 android:id="@+id/imageView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.97"
                 app:srcCompat="@drawable/lunchicon" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -144,13 +163,12 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/DinnerCardView"
-        android:layout_width="398dp"
-        android:layout_height="122dp"
-        android:layout_marginBottom="20dp"
+        android:layout_width="407dp"
+        android:layout_height="169dp"
+        android:layout_marginBottom="4dp"
         app:cardBackgroundColor="#FF5722"
         app:layout_constraintBottom_toTopOf="@+id/button2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -161,30 +179,51 @@
                 android:id="@+id/textView18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="112dp"
                 android:text="Dinner"
-                app:layout_constraintBottom_toTopOf="@+id/userMealDinner"
-                app:layout_constraintStart_toEndOf="@+id/imageView6"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/imageView6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.15"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.372" />
+                app:layout_constraintVertical_bias="0.384" />
 
             <TextView
                 android:id="@+id/userMealDinner"
-                android:layout_width="186dp"
-                android:layout_height="44dp"
-                android:layout_marginStart="44dp"
-                android:layout_marginBottom="16dp"
+                android:layout_width="247dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="left|center_vertical"
+                app:layout_constraintBottom_toTopOf="@+id/userCarbsDinner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.555"
+                app:layout_constraintStart_toEndOf="@+id/imageView6"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.82" />
+
+            <TextView
+                android:id="@+id/userCarbsDinner"
+                android:layout_width="247dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginBottom="5dp"
                 android:gravity="left|center_vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView6" />
 
             <ImageView
                 android:id="@+id/imageView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
                 app:srcCompat="@drawable/dinnericon" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

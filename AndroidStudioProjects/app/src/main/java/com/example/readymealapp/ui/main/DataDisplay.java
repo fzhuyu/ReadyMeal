@@ -47,7 +47,6 @@ public class DataDisplay extends AppCompatActivity {
                     + "\nYour sex is: " + sex
                     + "\nYour Caloric Goal is: " + prefCalories
                     + "\nYour Physical Activity is: " + userActivity);
-
         });
     }
 

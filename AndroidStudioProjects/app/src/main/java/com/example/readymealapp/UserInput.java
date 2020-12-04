@@ -209,8 +209,17 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
 
             //--------Caloric Goal--------
             //add the caloric goal into the database
-            me.DesiredCalories = Integer.parseInt(caloricGoal);
-            Meals.UserCalories = Integer.parseInt(caloricGoal);
+        if(Integer.parseInt(caloricGoal)<1200)
+            {
+                me.DesiredCalories = 1200;
+                Meals.UserCalories = 1200;
+                Toast.makeText(this, "Calories lower than 1200, has been set to 1200", Toast.LENGTH_SHORT).show();
+            }
+        else
+            {
+                me.DesiredCalories = Integer.parseInt(caloricGoal);
+                Meals.UserCalories = Integer.parseInt(caloricGoal);
+            }
             //Meals.UserCalories = Integer.parseInt(caloricGoal);
             //initialize current calories to 0
             me.CurrentCalories = 0;

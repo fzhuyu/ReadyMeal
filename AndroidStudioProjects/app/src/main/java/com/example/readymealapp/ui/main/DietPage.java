@@ -54,6 +54,12 @@ public class DietPage extends AppCompatActivity {
         if (Meals.VeggiesLunch == null)
             GETRequestVegs();
 
+        showBreakfast();
+        showLunch();
+        showDinner();
+        showCarbsLunch();
+        showCarbsDinner();
+
         //GETRequestCarbs(TotalCalories);
         //GETRequestVegs(TotalCalories);
     }
@@ -62,7 +68,7 @@ public class DietPage extends AppCompatActivity {
     {
         TextView userMealTextView1;
         userMealTextView1 = findViewById(R.id.userMealBreakfast);
-        String breakfastString = breakfast.substring(0, 1).toUpperCase() + breakfast.substring(1) + "\n" + Meals.breakCal + "cal";
+        String breakfastString = Meals.breakfast.substring(0, 1).toUpperCase() + Meals.breakfast.substring(1) + "\n" + Meals.breakCal + "cal";
         userMealTextView1.setText(breakfastString);
     }
 
@@ -70,7 +76,7 @@ public class DietPage extends AppCompatActivity {
     {
         TextView userMealTextView1;
         userMealTextView1 = findViewById(R.id.userMealLunch);
-        String lunchString = lunch.substring(0, 1).toUpperCase() + lunch.substring(1) + "\n" + Meals.mainCalLunch + "cal";
+        String lunchString = Meals.Lunch.substring(0, 1).toUpperCase() + Meals.Lunch.substring(1) + "\n" + Meals.mainCalLunch + "cal";
         userMealTextView1.setText(lunchString);
     }
 
@@ -78,8 +84,24 @@ public class DietPage extends AppCompatActivity {
     {
         TextView userMealTextView1;
         userMealTextView1 = findViewById(R.id.userMealDinner);
-        String dinnerString = dinner.substring(0, 1).toUpperCase() + dinner.substring(1) + "\n" + Meals.mainCalDinner + "cal";
+        String dinnerString = Meals.Dinner.substring(0, 1).toUpperCase() + Meals.Dinner.substring(1) + "\n" + Meals.mainCalDinner + "cal";
         userMealTextView1.setText(dinnerString);
+    }
+
+    private void showCarbsLunch()
+    {
+        TextView userMealTextView1;
+        userMealTextView1 = findViewById(R.id.userCarbsLunch);
+        String carbsLunchString = Meals.CarbsLunch + "\n" + Meals.carbCalLunch + "cal";
+        userMealTextView1.setText(carbsLunchString);
+    }
+
+    private void showCarbsDinner()
+    {
+        TextView userMealTextView1;
+        userMealTextView1 = findViewById(R.id.userCarbsDinner);
+        String carbsDinnerString = Meals.CarbsDinner + "\n" + Meals.carbCalDinner + "cal";
+        userMealTextView1.setText(carbsDinnerString);
     }
 
 
@@ -137,7 +159,6 @@ public class DietPage extends AppCompatActivity {
                                     // if the tokenized food name found in request equals the user's food preference, then store the calories
                                     if (tokFood.nextToken().toLowerCase().equals(UserVeg.toLowerCase()))
                                     {
-
                                         JSONArray TempJsonObj = foodFav.getJSONArray("foodNutrients");
                                         JSONObject JSONCal = (JSONObject) TempJsonObj.get(3);
                                         TotalCalories[0] += JSONCal.getInt("value");
@@ -148,7 +169,6 @@ public class DietPage extends AppCompatActivity {
                                             Log.d("myTag", "Gonna print Veggies!");
                                             return;
                                             // display to user the info about their meal plan
-
                                         }
                                         else
                                         {
