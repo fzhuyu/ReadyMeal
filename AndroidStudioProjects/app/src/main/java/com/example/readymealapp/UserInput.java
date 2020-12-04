@@ -7,6 +7,7 @@ import androidx.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,9 +15,23 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.readymealapp.ui.main.CalRoom;
 import com.example.readymealapp.ui.main.Meals;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.Object;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -148,6 +163,8 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
             final AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
             //creating the user
             User me = new User();
+            CalRoom cal = new CalRoom();
+            cal.CalAch = Meals.TotalCalories();
 
             //------name------
             //add the user first name into the database
@@ -209,9 +226,13 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
             myExecutor.execute(() -> {
                 Local_db.userDao().insertUser(me);
             });
+
+            // GET request call
+            GETRequest();
         //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------User input to Database----------------------------------------------------------------
         //-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 
         //Go to home from user input, code for the button
@@ -222,4 +243,127 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
 
     }
 
+    // GET Request is here
+    private void GETRequest()
+    {
+        final float[] TotalCalories = {0};
+
+        Map<String, Integer> breakfastItems = new HashMap<String, Integer>();
+        breakfastItems.put("Waffles", 82);
+        breakfastItems.put("Pancakes", 64);
+        breakfastItems.put("Sausages", 391);
+        breakfastItems.put("Grits", 143);
+        breakfastItems.put("Cereal", 307);
+
+        int i =  1 + (int)(Math.random() * ((5 - 1) + 1));
+
+        Iterator<Map.Entry<String, Integer>> itr = breakfastItems.entrySet().iterator();
+
+        while(itr.hasNext() && i != 0)
+        {
+            Map.Entry<String, Integer> entry = itr.next();
+            Meals.breakfast = entry.getKey();
+            Meals.breakCal = entry.getValue();
+            i--;
+        }
+
+
+        String APIurl = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=" + Meals.UserFoodPref + "s";
+
+        //User me = new User();
+        //User me = new User();
+        //Local_db.userDao().insertUser(me);
+
+        /////// code for using a GET request for JSON object from API ///////
+        ////////////////////////////////////////////////////////////////////
+
+        //RequestQueue ReqQ = Volley.newRequestQueue(this);
+        JsonObjectRequest ObjReq = new JsonObjectRequest(
+                Request.Method.GET,
+                APIurl,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // get an array of JSON objects that are Arrays of "foods"
+
+                            JSONArray jsonArray = response.getJSONArray("foods");
+
+                            // loop through this jsonArray to look for the user's food
+                            for (int i = 0; i < jsonArray.length(); i++)
+                            {
+
+                                int index = (int)(Math.random() * ((jsonArray.length() - 1) + 1));
+
+                                JSONObject foodFav = jsonArray.getJSONObject(index);
+
+                                String foodName = foodFav.getString("lowercaseDescription"); // title of the food, also might be index 3 if using JsonObjectRequest
+                                StringTokenizer tokFood = new StringTokenizer(foodName); // tokenizes string to find the keyword, ie food preference
+
+                                // when string is parsed, look for the keyword for user
+                                while (tokFood.hasMoreTokens())
+                                {
+                                    // if the tokenized food name found in request equals the user's food preference, then store the calories
+                                    if (tokFood.nextToken().toLowerCase().equals(Meals.UserFoodPref.toLowerCase()))
+                                    {
+
+                                        JSONArray TempJsonObj = foodFav.getJSONArray("foodNutrients");
+                                        JSONObject JSONCal = (JSONObject) TempJsonObj.get(3);
+                                        TotalCalories[0] += JSONCal.getInt("value");
+
+                                        // if we have reached the max calories OR all the main meals have been added to class "Meals" then we'll display everything in the Meals class
+                                        if (TotalCalories[0] >= Meals.UserCalories)
+                                        {
+                                            //Log.d("myTag", "Gonna print breakfast name now!");
+                                            Meals.GETCalTotal += TotalCalories[0];
+                                            return;
+                                            // display to user the info about their meal plan
+
+                                        }
+                                        else
+                                        {
+                                            if(Meals.Lunch == null)
+                                            {
+                                                Meals.Lunch = foodFav.getString("lowercaseDescription");
+                                                Meals.mainCalLunch = JSONCal.getInt("value");
+                                                break;
+                                            }
+                                            else if(Meals.Dinner == null)
+                                            {
+                                                Meals.Dinner = foodFav.getString("lowercaseDescription");
+                                                Meals.mainCalDinner = JSONCal.getInt("value");
+                                                Meals.GETCalTotal += TotalCalories[0];
+                                                Log.d("Here we are", "Got the main meals");
+                                                return;
+                                            }
+                                        }
+                                        // end of if token matches user's food preference
+
+                                    }
+                                    // else, don't set the calories
+                                }
+                                // end of while loop token
+                            }
+                            // end of JSON for loop
+                        }
+                        // end of try in case JSON Request is invalid or something
+                        catch(JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, // end of API listener description
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }
+        );
+
+        //  |
+        //  V  this actually does the GET Request
+        Volley.newRequestQueue(getApplicationContext()).add(ObjReq);
+        //ReqQ.add(ObjReq);
+    }
 }

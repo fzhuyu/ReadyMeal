@@ -24,6 +24,8 @@ public class DataDisplay extends AppCompatActivity {
 
         //instantiating the database
         final AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
+        final CalDatabase Cal = Room.databaseBuilder(getApplicationContext(), CalDatabase.class, "User_db").build();
+
         //
 
         Executor myExecutor = Executors.newSingleThreadExecutor();

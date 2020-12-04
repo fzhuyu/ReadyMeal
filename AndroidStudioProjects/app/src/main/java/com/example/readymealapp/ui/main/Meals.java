@@ -28,6 +28,8 @@ public class Meals
     public static String UserFoodPref;
     public static float UserCalories;
 
+    public static int GETCalTotal;
+
 
     // constructor
     public Meals()
