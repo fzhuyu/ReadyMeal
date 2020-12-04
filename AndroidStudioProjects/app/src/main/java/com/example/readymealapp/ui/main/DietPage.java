@@ -41,10 +41,10 @@ import static java.sql.DriverManager.println;
 public class DietPage extends AppCompatActivity {
     //String userFood;
     //String breakfast = "";
-    String LunchVeggies = "";
+    String LunchVeggies;
     float LunchCalVeggies = 0;
 
-    String DinnerVeggies = "";
+    String DinnerVeggies;
     float DinnerCalVeggies = 0;
     final float[] TotalCalories = {0};
 
@@ -60,7 +60,7 @@ public class DietPage extends AppCompatActivity {
         showBreakfast();
         showLunch();
         showDinner();
-        showCarbsLunch();
+        //showCarbsLunch();
         showCarbsDinner();
 
         //GETRequestCarbs(TotalCalories);
@@ -95,7 +95,7 @@ public class DietPage extends AppCompatActivity {
     {
         TextView userMealTextView1;
         userMealTextView1 = findViewById(R.id.userCarbsLunch);
-        String carbsLunchString = LunchVeggies /*Meals.CarbsLunch*/ + "\n" + Meals.carbCalLunch + "cal";
+        String carbsLunchString = LunchVeggies /*Meals.CarbsLunch*/ + "\n" + LunchCalVeggies/*Meals.carbCalLunch*/ + " cal";
         userMealTextView1.setText(carbsLunchString);
     }
 
@@ -111,23 +111,25 @@ public class DietPage extends AppCompatActivity {
     private void GETRequestVegs()
     {
 
-        ArrayList<String> Veggies = new ArrayList<>();
-        Veggies.add("beans");
-        Veggies.add("broccolis");
-        Veggies.add("spinaches");
-        Veggies.add("peas");
+        ArrayList<String> Second = new ArrayList<>();
+        Second.add("beans");
+        Second.add("broccolis");
+        Second.add("spinaches");
+        Second.add("peas");
+        Second.add("pastas");
+        Second.add("rices");
+        Second.add("breads");
 
-        int i =  (int) Math.random() * 3;
+        Random random = new Random();
+        int i = random.nextInt(7);
         int min = 3;
 
-        if (Veggies.get(i).equals("peas") || Veggies.get(i).equals("beans"))
+        if (Second.get(i).equals("peas") || Second.get(i).equals("beans"))
             min = 15;
 
-        String APIurlV = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=" + Veggies.get(i);
-        final String UserVeg = Veggies.get(i);
-        //User me = new User();
-        //User me = new User();
-        //Local_db.userDao().insertUser(me);
+        String APIurlV = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=mOYUdPGUOJOJQJxoKffVm7buXQNzz5oKj7oqEBnX&query=" + Second.get(i);
+        final String UserSecond = Second.get(i);
+        Log.d("sory", UserSecond);
 
         /////// code for using a GET request for JSON object from API ///////
         ////////////////////////////////////////////////////////////////////
@@ -144,28 +146,44 @@ public class DietPage extends AppCompatActivity {
                             // get an array of JSON objects that are Arrays of "foods"
 
                             JSONArray jsonArray = response.getJSONArray("foods");
-                            boolean found = false;
 
+                            int index = finalMin + (int)(Math.random() * ((18 - finalMin) + 1));
+
+                            JSONObject foodFav = jsonArray.getJSONObject(index);
+                            //String foodName = foodFav.getString("lowercaseDescription"); // title of the food, also might be index 3 if using JsonObjectRequest
+
+                            JSONArray TempJsonObj = foodFav.getJSONArray("foodNutrients");
+                            JSONObject JSONCal = (JSONObject) TempJsonObj.get(3);
+                            TotalCalories[0] += JSONCal.getInt("value");
+                            LunchCalVeggies = JSONCal.getInt("value");
+
+                            LunchVeggies = foodFav.getString("lowercaseDescription");
+                            Meals.VeggiesLunch = LunchVeggies;
+                            Meals.vegCalLunch = LunchCalVeggies;
+
+
+                            index = finalMin + (int)(Math.random() * ((18 - finalMin) + 1));
+
+                            foodFav = jsonArray.getJSONObject(index);
+                            //foodName = foodFav.getString("lowercaseDescription"); // title of the food, also might be index 3 if using JsonObjectRequest
+                            DinnerVeggies = foodFav.getString("lowercaseDescription");
+                            DinnerCalVeggies = JSONCal.getInt("value");
+                            Meals.GETCalTotal += TotalCalories[0];
+
+                            /*
                             // loop through this jsonArray to look for the user's food
                             while (found == false)
                             {
+                                 StringTokenizer tokFood = new StringTokenizer(foodName); // tokenizes string to find the keyword, ie food preference
 
-                                int index = (int)(Math.random() * ((18 - finalMin) + 1));
-
-                                JSONObject foodFav = jsonArray.getJSONObject(index);
-
-                                String foodName = foodFav.getString("lowercaseDescription"); // title of the food, also might be index 3 if using JsonObjectRequest
-                                StringTokenizer tokFood = new StringTokenizer(foodName); // tokenizes string to find the keyword, ie food preference
 
                                 // when string is parsed, look for the keyword for user
                                 while (tokFood.hasMoreTokens())
                                 {
+                                    Log.d("Tag", "I love memes");
                                     // if the tokenized food name found in request equals the user's food preference, then store the calories
-                                    if (tokFood.nextToken().toLowerCase().equals(UserVeg.toLowerCase()))
+                                    if (tokFood.nextToken().toLowerCase().equals(UserSecond.toLowerCase()))
                                     {
-                                        JSONArray TempJsonObj = foodFav.getJSONArray("foodNutrients");
-                                        JSONObject JSONCal = (JSONObject) TempJsonObj.get(3);
-                                        TotalCalories[0] += JSONCal.getInt("value");
 
                                         // if we have reached the max calories OR all the main meals have been added to class "Meals" then we'll display everything in the Meals class
                                         if (TotalCalories[0] >= Meals.UserCalories)
@@ -182,17 +200,17 @@ public class DietPage extends AppCompatActivity {
                                             // if not fulfilled it'll set the name of the food to the Meal's static string and set that meal's calories too
                                             if (Meals.VeggiesLunch == null)
                                             {
-                                                Log.d("myTag", "YUM VEGGEIS....SAID NOBODY");
                                                 LunchVeggies = foodFav.getString("lowercaseDescription");
+                                                Meals.VeggiesLunch = LunchVeggies;
+
                                                 //temp = foodFav.getString("KCAL");
                                                 LunchCalVeggies = JSONCal.getInt("value");
+                                                Meals.vegCalLunch = LunchCalVeggies;
                                                 break;
                                             }
                                             else if(Meals.VeggiesDinner == null)
                                             {
-                                                DinnerVeggies = foodFav.getString("lowercaseDescription");
-                                                DinnerCalVeggies = JSONCal.getInt("value");
-                                                Meals.GETCalTotal += TotalCalories[0];
+
                                                 // this ends.....display info to user
                                                 found = true;
                                                 break;
@@ -206,7 +224,9 @@ public class DietPage extends AppCompatActivity {
                                 // end of while loop token
                             }
                             // end of JSON while loop
+                             */
                             showCarbsLunch();
+                            showCarbsDinner();
                         }
                         // end of try in case JSON Request is invalid or something
                         catch(JSONException e) {
@@ -222,5 +242,9 @@ public class DietPage extends AppCompatActivity {
                 }
         );
         Volley.newRequestQueue(getApplicationContext()).add(ObjReqVeg);
+        Meals.VeggiesLunch = LunchVeggies;
+        Meals.VeggiesDinner = DinnerVeggies;
+        Meals.vegCalLunch = LunchCalVeggies;
+        Meals.vegCalDinner = DinnerCalVeggies;
     }
 }

@@ -304,7 +304,7 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
                             while (found == false)
                             {
 
-                                int index = (int)(Math.random() * ((jsonArray.length() - 1) + 1));
+                                int index = (int) Math.random() * jsonArray.length();
 
                                 JSONObject foodFav = jsonArray.getJSONObject(index);
 

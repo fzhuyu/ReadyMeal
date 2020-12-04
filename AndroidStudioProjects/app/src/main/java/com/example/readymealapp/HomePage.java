@@ -41,8 +41,7 @@ public class HomePage extends AppCompatActivity {
         //instantiating the database
         final AppDatabase Local_db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "User_db").build();
         //
-        //GETRequestCarbs();
-        Log.d("dori", "yaaaa!!");
+        GETRequestCarbs();
 
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
@@ -111,55 +110,28 @@ public class HomePage extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             // get an array of JSON objects that are Arrays of "foods"
-                            DietPage diet = new DietPage();
                             JSONArray jsonArray = response.getJSONArray("foods");
 
                             int index = min + (int)(Math.random() * ((15 - min) + 1));
 
                             JSONObject foodFav = jsonArray.getJSONObject(index);
 
-                            String foodName = foodFav.getString("lowercaseDescription"); // title of the food, also might be index 3 if using JsonObjectRequest
-                            StringTokenizer tokFood = new StringTokenizer(foodName); // tokenizes string to find the keyword, ie food preference
+                            JSONArray TempJsonObj = foodFav.getJSONArray("foodNutrients");
+                            JSONObject JSONCal = (JSONObject) TempJsonObj.get(3);
+                            Meals.CarbsLunch = foodFav.getString("lowercaseDescription");
+                            Meals.carbCalLunch = JSONCal.getInt("value");
 
-                            // when string is parsed, look for the keyword for user
-                            while (tokFood.hasMoreTokens())
-                            {
-                                // if the tokenized food name found in request equals the user's food preference, then store the calories
-                                if (tokFood.nextToken().toLowerCase().equals(UserCarbs.toLowerCase()))
-                                {
+                            index = min + (int)(Math.random() * ((15 - min) + 1));
 
-                                    JSONArray TempJsonObj = foodFav.getJSONArray("foodNutrients");
-                                    JSONObject JSONCal = (JSONObject) TempJsonObj.get(3);
-                                    Meals.CarbsLunch = foodFav.getString("lowercaseDescription");
-                                    Meals.carbCalLunch = JSONCal.getInt("value");
+                            foodFav = jsonArray.getJSONObject(index);
 
-                                    break;
-                                        /*
-                                        if (Meals.CarbsLunch == null)
-                                        {
-                                            Log.d("myTag", "HEY IS THIS NULL? LMAO!!");
-                                            Meals.CarbsLunch = foodFav.getString("description");
-                                            //temp = foodFav.getString("KCAL");
-                                            Meals.carbCalLunch = JSONCal.getInt("value");
-                                            TotalCalories[0] += Meals.carbCalLunch;
-                                            break;
-                                        }
-
-                                        if(Meals.CarbsDinner == null)
-                                        {
-                                            Meals.CarbsDinner = foodFav.getString("description");
-                                            Meals.carbCalDinner = JSONCal.getInt("value");
-                                            TotalCalories[0] += Meals.carbCalDinner;
-                                            //break;
-                                            return;
-                                        }
-                                        */
+                            TempJsonObj = foodFav.getJSONArray("foodNutrients");
+                            JSONCal = (JSONObject) TempJsonObj.get(3);
+                            Meals.CarbsDinner = foodFav.getString("lowercaseDescription");
+                            Meals.carbCalDinner = JSONCal.getInt("value");
 
 
-                                }
-                                // else, don't set the calories
-                            }
-                            // end of while loop token
+
                         }
                         // end of try in case JSON Request is invalid or something
                         catch(JSONException e) {
