@@ -51,7 +51,7 @@ public class Meals
         carbCalDinner = 0;
     }
 
-    public int TotalCalories()
+    public static int TotalCalories()
     {
         int Total = 0;
 

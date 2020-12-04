@@ -14,10 +14,43 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="600dp"
-        android:text="Set the Date"
+        android:layout_marginTop="540dp"
+        android:text=""
         android:textColor="@android:color/background_dark"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/date_view2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="570dp"
+        android:textSize="15dp"
+        android:text=""
+        android:textColor="@android:color/background_dark"
+        android:textStyle="bold|italic" />
+
+    <TextView
+        android:id="@+id/date_view3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="595dp"
+        android:textSize="15dp"
+        android:text=""
+        android:textColor="@android:color/background_dark"
+        android:textStyle="bold|italic" />
+
+    <TextView
+        android:id="@+id/date_view4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="620dp"
+        android:textSize="15dp"
+        android:text=""
+        android:textColor="@android:color/background_dark"
+        android:textStyle="bold|italic" />
 
 
     <CalendarView
