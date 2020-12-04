@@ -102,6 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="12dp"
                 app:cardCornerRadius="12dp"
+                android:onClick="goToCalendar"
                 app:cardElevation="6dp">
 
                 <LinearLayout

@@ -56,6 +56,11 @@ public class HomePage extends AppCompatActivity {
         startActivity(DataDisplayActivity);
     }
 
+    public void goToCalendar(View view){
+        Intent DataDisplayActivity = new Intent (this, calendar_activity.class);
+        startActivity(DataDisplayActivity);
+    }
+
     //Function that will take you from the homepage to the Statistics Page from clicking the cardview
     public void goToStatistics(View view){
         Intent StatisticsPageActivity = new Intent (this, StatisticsPage.class);
