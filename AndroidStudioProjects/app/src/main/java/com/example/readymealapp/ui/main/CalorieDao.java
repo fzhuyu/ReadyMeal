@@ -15,12 +15,13 @@ import com.example.readymealapp.User;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Dao
 public interface CalorieDao {
 
     // returns a class of CalRoom
-    @Query("SELECT Date FROM CalRoom WHERE Date = (:date)")
+    @Query("SELECT * FROM CalRoom WHERE Date = (:date)")
     CalRoom FindDate(Date date);
 
 
