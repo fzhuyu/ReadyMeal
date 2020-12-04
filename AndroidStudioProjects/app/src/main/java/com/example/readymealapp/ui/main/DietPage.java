@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -38,10 +39,13 @@ import java.util.concurrent.atomic.AtomicReference;
 import static java.sql.DriverManager.println;
 
 public class DietPage extends AppCompatActivity {
-    String userFood;
-    String breakfast = "";
-    String lunch = "";
-    String dinner = "";
+    //String userFood;
+    //String breakfast = "";
+    String LunchVeggies = "";
+    float LunchCalVeggies = 0;
+
+    String DinnerVeggies = "";
+    float DinnerCalVeggies = 0;
     final float[] TotalCalories = {0};
 
 
@@ -51,8 +55,7 @@ public class DietPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.diet);
 
-        if (Meals.VeggiesLunch == null)
-            GETRequestVegs();
+        GETRequestVegs();
 
         showBreakfast();
         showLunch();
@@ -92,7 +95,7 @@ public class DietPage extends AppCompatActivity {
     {
         TextView userMealTextView1;
         userMealTextView1 = findViewById(R.id.userCarbsLunch);
-        String carbsLunchString = Meals.CarbsLunch + "\n" + Meals.carbCalLunch + "cal";
+        String carbsLunchString = LunchVeggies /*Meals.CarbsLunch*/ + "\n" + Meals.carbCalLunch + "cal";
         userMealTextView1.setText(carbsLunchString);
     }
 
@@ -114,8 +117,8 @@ public class DietPage extends AppCompatActivity {
         Veggies.add("spinaches");
         Veggies.add("peas");
 
-        int i =  1 + (int)(Math.random() * ((3 - 1) + 1));
-        int min = 1;
+        int i =  (int) Math.random() * 3;
+        int min = 3;
 
         if (Veggies.get(i).equals("peas") || Veggies.get(i).equals("beans"))
             min = 15;
@@ -141,12 +144,13 @@ public class DietPage extends AppCompatActivity {
                             // get an array of JSON objects that are Arrays of "foods"
 
                             JSONArray jsonArray = response.getJSONArray("foods");
+                            boolean found = false;
 
                             // loop through this jsonArray to look for the user's food
-                            for (int i = 0; i < jsonArray.length(); i++)
+                            while (found == false)
                             {
 
-                                int index = finalMin + (int)(Math.random() * ((jsonArray.length() - finalMin) + 1));
+                                int index = (int)(Math.random() * ((18 - finalMin) + 1));
 
                                 JSONObject foodFav = jsonArray.getJSONObject(index);
 
@@ -167,7 +171,8 @@ public class DietPage extends AppCompatActivity {
                                         if (TotalCalories[0] >= Meals.UserCalories)
                                         {
                                             Log.d("myTag", "Gonna print Veggies!");
-                                            return;
+                                            found = true;
+                                            break;
                                             // display to user the info about their meal plan
                                         }
                                         else
@@ -178,18 +183,19 @@ public class DietPage extends AppCompatActivity {
                                             if (Meals.VeggiesLunch == null)
                                             {
                                                 Log.d("myTag", "YUM VEGGEIS....SAID NOBODY");
-                                                Meals.CarbsLunch = foodFav.getString("lowercaseDescription");
+                                                LunchVeggies = foodFav.getString("lowercaseDescription");
                                                 //temp = foodFav.getString("KCAL");
-                                                Meals.carbCalLunch = JSONCal.getInt("value");
+                                                LunchCalVeggies = JSONCal.getInt("value");
                                                 break;
                                             }
                                             else if(Meals.VeggiesDinner == null)
                                             {
-                                                Meals.CarbsDinner = foodFav.getString("lowercaseDescription");
-                                                Meals.carbCalDinner = JSONCal.getInt("value");
+                                                DinnerVeggies = foodFav.getString("lowercaseDescription");
+                                                DinnerCalVeggies = JSONCal.getInt("value");
                                                 Meals.GETCalTotal += TotalCalories[0];
                                                 // this ends.....display info to user
-                                                return;
+                                                found = true;
+                                                break;
                                             }
                                         }
                                         // end of if token matches user's food preference
@@ -199,7 +205,8 @@ public class DietPage extends AppCompatActivity {
                                 }
                                 // end of while loop token
                             }
-                            // end of JSON for loop
+                            // end of JSON while loop
+                            showCarbsLunch();
                         }
                         // end of try in case JSON Request is invalid or something
                         catch(JSONException e) {
@@ -214,5 +221,6 @@ public class DietPage extends AppCompatActivity {
                     }
                 }
         );
+        Volley.newRequestQueue(getApplicationContext()).add(ObjReqVeg);
     }
 }

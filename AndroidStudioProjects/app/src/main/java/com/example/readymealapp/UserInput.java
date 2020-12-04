@@ -298,9 +298,10 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
                             // get an array of JSON objects that are Arrays of "foods"
 
                             JSONArray jsonArray = response.getJSONArray("foods");
+                            Boolean found = false;
 
                             // loop through this jsonArray to look for the user's food
-                            for (int i = 0; i < jsonArray.length(); i++)
+                            while (found == false)
                             {
 
                                 int index = (int)(Math.random() * ((jsonArray.length() - 1) + 1));
@@ -326,7 +327,8 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
                                         {
                                             //Log.d("myTag", "Gonna print breakfast name now!");
                                             Meals.GETCalTotal += TotalCalories[0];
-                                            return;
+                                            found = true;
+                                            break;
                                             // display to user the info about their meal plan
 
                                         }
@@ -344,7 +346,8 @@ public class UserInput extends AppCompatActivity implements AdapterView.OnItemSe
                                                 Meals.mainCalDinner = JSONCal.getInt("value");
                                                 Meals.GETCalTotal += TotalCalories[0];
                                                 Log.d("Here we are", "Got the main meals");
-                                                return;
+                                                found = true;
+                                                break;
                                             }
                                         }
                                         // end of if token matches user's food preference
