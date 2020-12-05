@@ -1,7 +1,9 @@
 package com.example.readymealapp.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -17,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.readymealapp.AppDatabase;
+import com.example.readymealapp.HomePage;
 import com.example.readymealapp.R;
 
 import org.json.JSONArray;
@@ -60,8 +63,9 @@ public class DietPage extends AppCompatActivity {
         showBreakfast();
         showLunch();
         showDinner();
-        //showCarbsLunch();
+        showCarbsLunch();
         showCarbsDinner();
+
 
         //GETRequestCarbs(TotalCalories);
         //GETRequestVegs(TotalCalories);
@@ -71,7 +75,7 @@ public class DietPage extends AppCompatActivity {
     {
         TextView userMealTextView1;
         userMealTextView1 = findViewById(R.id.userMealBreakfast);
-        String breakfastString = Meals.breakfast.substring(0, 1).toUpperCase() + Meals.breakfast.substring(1) + "\n" + Meals.breakCal + "cal";
+        String breakfastString = "Main:\n" + Meals.breakfast.substring(0, 1).toUpperCase() + Meals.breakfast.substring(1) + "\n" + Meals.breakCal + "cal";
         userMealTextView1.setText(breakfastString);
     }
 
@@ -79,7 +83,7 @@ public class DietPage extends AppCompatActivity {
     {
         TextView userMealTextView1;
         userMealTextView1 = findViewById(R.id.userMealLunch);
-        String lunchString = Meals.Lunch.substring(0, 1).toUpperCase() + Meals.Lunch.substring(1) + "\n" + Meals.mainCalLunch + "cal";
+        String lunchString = "Main:\n" +  Meals.Lunch.substring(0, 1).toUpperCase() + Meals.Lunch.substring(1) + "\n" + Meals.mainCalLunch + "cal";
         userMealTextView1.setText(lunchString);
     }
 
@@ -87,7 +91,7 @@ public class DietPage extends AppCompatActivity {
     {
         TextView userMealTextView1;
         userMealTextView1 = findViewById(R.id.userMealDinner);
-        String dinnerString = Meals.Dinner.substring(0, 1).toUpperCase() + Meals.Dinner.substring(1) + "\n" + Meals.mainCalDinner + "cal";
+        String dinnerString = "Main:\n" + Meals.Dinner.substring(0, 1).toUpperCase() + Meals.Dinner.substring(1) + "\n" + Meals.mainCalDinner + "cal";
         userMealTextView1.setText(dinnerString);
     }
 
@@ -95,7 +99,7 @@ public class DietPage extends AppCompatActivity {
     {
         TextView userMealTextView1;
         userMealTextView1 = findViewById(R.id.userCarbsLunch);
-        String carbsLunchString = LunchVeggies /*Meals.CarbsLunch*/ + "\n" + LunchCalVeggies/*Meals.carbCalLunch*/ + " cal";
+        String carbsLunchString = "Carbs:\n" + Meals.CarbsLunch + "\n" + Meals.carbCalLunch + " cal";
         userMealTextView1.setText(carbsLunchString);
     }
 
@@ -103,8 +107,23 @@ public class DietPage extends AppCompatActivity {
     {
         TextView userMealTextView1;
         userMealTextView1 = findViewById(R.id.userCarbsDinner);
-        String carbsDinnerString = Meals.CarbsDinner + "\n" + Meals.carbCalDinner + "cal";
+        String carbsDinnerString = "Carbs:\n" + Meals.CarbsDinner + "\n" + Meals.carbCalDinner + "cal";
         userMealTextView1.setText(carbsDinnerString);
+    }
+
+    private void showVeggiesLunch()
+    {
+        TextView userMealTextView1;
+        userMealTextView1 = findViewById(R.id.userVeggiesLunch);
+        String veggiesLunchString = "Veggies:\n" + LunchVeggies + "\n" + LunchCalVeggies + " cal";
+        userMealTextView1.setText(veggiesLunchString);
+    }
+    private void showVeggiesDinner()
+    {
+        TextView userMealTextView1;
+        userMealTextView1 = findViewById(R.id.userVeggiesDinner);
+        String veggiesLunchString = "Veggies:\n" + DinnerVeggies + "\n" + DinnerCalVeggies + " cal";
+        userMealTextView1.setText(veggiesLunchString);
     }
 
 
@@ -225,26 +244,36 @@ public class DietPage extends AppCompatActivity {
                             }
                             // end of JSON while loop
                              */
-                            showCarbsLunch();
-                            showCarbsDinner();
+                            //showCarbsLunch();
+                            //showCarbsDinner();
+                            showVeggiesLunch();
+                            showVeggiesDinner();
+
                         }
                         // end of try in case JSON Request is invalid or something
                         catch(JSONException e) {
                             e.printStackTrace();
                         }
                     }
-                }, // end of API listener description
+                },
+                // end of API listener description
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                     }
                 }
+
         );
+
         Volley.newRequestQueue(getApplicationContext()).add(ObjReqVeg);
         Meals.VeggiesLunch = LunchVeggies;
         Meals.VeggiesDinner = DinnerVeggies;
         Meals.vegCalLunch = LunchCalVeggies;
         Meals.vegCalDinner = DinnerCalVeggies;
+    }
+    public void goToHomePage(View view){
+        Intent HomePageActivity = new Intent (this, HomePage.class);
+        startActivity(HomePageActivity);
     }
 }
